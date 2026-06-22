@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stardance – Hack Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+:root {
+  --space-dark: #0a0a2e;
+  --space-mid: #0d1b4b;
+  --star-yellow: #ffd93d;
+  --rocket-orange: #ff6b35;
+  --planet-teal: #4ecdc4;
+  --planet-pink: #ff6b9d;
+  --nebula-purple: #a855f7;
+  --white: #ffffff;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  font-family: "Nunito", sans-serif;
+  overflow: hidden;
+  background: var(--space-dark);
+  margin: 0; padding: 0;
+}
+#stars-canvas {
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+}
+.page {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(30px);
+  z-index: 1;
+  overflow: hidden;
+}
+.page.active {
+  opacity: 1; pointer-events: all;
+  transform: translateY(0);
+}
+.page.exit-up {
+  opacity: 0; transform: translateY(-40px);
+}
+#page-dashboard { overflow-y: auto; }
+
+/* KEY FIX: make sls-intro page scrollable */
+#page-sls-intro { overflow-y: auto; }
+
+/* KEY FIX: make home page scrollable so button is always reachable */
+#page-home { overflow-y: auto; overflow-x: hidden; }
+
+.planet { position: absolute; border-radius: 50%; pointer-events: none; }
+
+/* PAGE 1 */
+#page-home {
+  background: radial-gradient(ellipse at 60% 40%, #1a1060 0%, #0a0a2e 70%);
+}
+.nav {
+  display: flex; justify-content: flex-end;
+  align-items: center; gap: 10px;
+  padding: 14px 28px; z-index: 10; position: relative;
+  flex-shrink: 0;
+}
+.nav-btn {
+  font-family: "Fredoka One", cursive;
+  font-size: 0.95rem; border: none; cursor: pointer;
+  padding: 8px 18px; border-radius: 50px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.nav-btn:hover { transform: scale(1.07); }
+.nav-btn.guest {
+  background: transparent;
+  border: 2px dashed rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.55); font-size: 0.88rem;
+}
+.nav-btn.guest:hover { border-color: rgba(255,255,255,0.6); color: rgba(255,255,255,0.85); }
+.nav-btn.login {
+  background: transparent;
+  border: 2.5px solid var(--planet-teal);
+  color: var(--planet-teal);
+}
+.nav-btn.signup {
+  background: var(--star-yellow);
+  color: var(--space-dark);
+  box-shadow: 0 4px 0 #c9a500;
+}
+.nav-btn.signup:hover { box-shadow: 0 2px 0 #c9a500; transform: scale(1.07) translateY(2px); }
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(78,205,196,0.35);
+  border-radius: 50px; padding: 5px 12px 5px 6px;
+  animation: fadeIn 0.4s ease;
+}
+.user-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--planet-teal), var(--nebula-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Fredoka One", cursive; font-size: 0.95rem; color: white;
+}
+.user-name { font-family: "Fredoka One", cursive; font-size: 0.95rem; color: var(--star-yellow); }
+.logout-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  background: transparent; border: 1.5px solid rgba(255,107,157,0.5);
+  color: var(--planet-pink); padding: 4px 12px; border-radius: 50px;
+  cursor: pointer; transition: all 0.15s;
+}
+.logout-btn:hover { background: rgba(255,107,157,0.15); border-color: var(--planet-pink); }
+.guest-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 2px dashed rgba(255,255,255,0.25);
+  border-radius: 50px; padding: 5px 14px 5px 10px;
+  animation: fadeIn 0.4s ease;
+}
+.guest-icon {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+}
+.guest-label { font-family: "Fredoka One", cursive; font-size: 0.9rem; color: rgba(255,255,255,0.6); }
+.join-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  background: var(--star-yellow); color: var(--space-dark);
+  border: none; padding: 5px 13px; border-radius: 50px;
+  cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 0 #c9a500;
+}
+.join-btn:hover { transform: scale(1.05); }
+.home-content {
+  flex: 1; display: flex; align-items: center;
+  padding: 20px 48px 60px; position: relative; overflow: visible;
+  min-height: 520px;
+}
+.home-text { z-index: 5; max-width: 500px; }
+.hackclub-badge {
+  display: inline-block; background: var(--rocket-orange);
+  color: white; font-family: "Fredoka One", cursive;
+  font-size: 0.85rem; padding: 4px 14px; border-radius: 50px;
+  margin-bottom: 10px; box-shadow: 0 3px 0 #c93e00; letter-spacing: 1px;
+}
+.home-title {
+  font-family: "Fredoka One", cursive;
+  font-size: clamp(1.9rem, 5vw, 3.8rem);
+  color: var(--white); line-height: 1.1; padding-top: 0.1em;
+  text-shadow: 4px 4px 0px rgba(78,205,196,0.3);
+}
+.home-title span { color: var(--star-yellow); display: inline-block; animation: floatAnim 3s ease-in-out infinite; }
+.home-subtitle {
+  font-size: 1.05rem; color: #a0b4d8; margin: 10px 0 24px;
+  font-weight: 600; line-height: 1.5; max-width: 380px;
+}
+.letsgo-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.3rem;
+  background: linear-gradient(135deg, var(--rocket-orange), var(--planet-pink));
+  color: white; border: none; cursor: pointer;
+  padding: 13px 40px; border-radius: 60px;
+  box-shadow: 0 6px 0 #a02060, 0 12px 40px rgba(255,107,53,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: inline-flex; align-items: center; gap: 8px;
+  position: relative; overflow: hidden;
+}
+.letsgo-btn::after {
+  content: ""; position: absolute; inset: 0;
+  background: white; opacity: 0; transition: opacity 0.2s; border-radius: inherit;
+}
+.letsgo-btn:hover::after { opacity: 0.08; }
+.letsgo-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 8px 0 #a02060, 0 20px 50px rgba(255,107,53,0.5); }
+.letsgo-btn:active { transform: scale(1.02) translateY(2px); box-shadow: 0 4px 0 #a02060; }
+.home-illustration {
+  position: absolute; right: 0; bottom: 0;
+  width: 50%; height: calc(100% - 60px);
+  display: flex; align-items: flex-end; justify-content: center;
+  pointer-events: none;
+}
+.rocket-svg { width: 300px; animation: rocketFloat 4s ease-in-out infinite; position: relative; z-index: 2; }
+.rocket-bubble {
+  position: absolute; top: 12%; right: 52%;
+  background: white; color: #1a1a3e;
+  font-family: "Fredoka One", cursive; font-size: 1rem;
+  line-height: 1.5; padding: 14px 18px; border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(78,205,196,0.2);
+  border: 2.5px solid rgba(78,205,196,0.5);
+  max-width: 220px; min-width: 160px; z-index: 10;
+  opacity: 0; transform: scale(0.7) translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+}
+.rocket-bubble.visible { opacity: 1; transform: scale(1) translateY(0); }
+.rocket-bubble.floating { animation: bubbleFloat 4s ease-in-out infinite; }
+.rocket-bubble-tail {
+  position: absolute; bottom: -14px; right: 28px;
+  width: 0; height: 0;
+  border-left: 10px solid transparent; border-right: 10px solid transparent;
+  border-top: 14px solid white;
+  filter: drop-shadow(0 3px 2px rgba(0,0,0,0.1));
+}
+.rocket-bubble-tail::before {
+  content: ""; position: absolute; top: -17px; left: -12px;
+  width: 0; height: 0;
+  border-left: 12px solid transparent; border-right: 12px solid transparent;
+  border-top: 17px solid rgba(78,205,196,0.5); z-index: -1;
+}
+.rocket-bubble-cursor {
+  display: inline-block; width: 2px; height: 1em;
+  background: var(--planet-teal); margin-left: 2px;
+  animation: blink 0.75s step-end infinite; vertical-align: middle;
+}
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  color: rgba(255,255,255,0.4); letter-spacing: 1px;
+  opacity: 0; transition: opacity 0.6s ease; pointer-events: none; z-index: 5;
+}
+.scroll-hint.visible { opacity: 1; }
+.scroll-arrow { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.scroll-arrow span {
+  display: block; width: 12px; height: 12px;
+  border-right: 2.5px solid rgba(255,255,255,0.4);
+  border-bottom: 2.5px solid rgba(255,255,255,0.4);
+  transform: rotate(45deg); animation: scrollBounce 1.4s ease-in-out infinite;
+}
+.scroll-arrow span:nth-child(2) { animation-delay: 0.15s; opacity: 0.7; }
+.scroll-arrow span:nth-child(3) { animation-delay: 0.3s; opacity: 0.4; }
+.p1 { width: 160px; height: 160px; background: radial-gradient(circle at 35% 35%, #6b3fa0, #2d1060); top: 8%; right: 8%; opacity: 0.7; }
+.p1::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 8px solid rgba(168,85,247,0.3); }
+.p2 { width: 80px; height: 80px; background: radial-gradient(circle at 30% 30%, #4ecdc4, #1a6b66); top: 55%; left: 44%; }
+.p3 { width: 48px; height: 48px; background: radial-gradient(circle at 30% 30%, var(--star-yellow), #8a6800); bottom: 20%; right: 35%; }
+
+/* PAGE 2 */
+#page-astro { background: radial-gradient(ellipse at 50% 60%, #0e1a4e 0%, #060618 80%); }
+.astro-scene {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 12px 32px; gap: 32px; position: relative; overflow: hidden;
+}
+.astronaut-wrap {
+  flex-shrink: 0; position: relative;
+  display: flex; flex-direction: column; align-items: center;
+}
+.astronaut-svg {
+  width: 170px; animation: astroFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 10px 30px rgba(78,205,196,0.3));
+  transition: filter 0.3s;
+}
+.astronaut-svg.talking {
+  filter: drop-shadow(0 10px 30px rgba(78,205,196,0.3)) drop-shadow(0 0 18px rgba(78,205,196,0.7));
+  animation: astroFloat 3.5s ease-in-out infinite, talkBounce 0.4s ease-in-out infinite;
+}
+.voice-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.voice-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  border: 2px solid rgba(78,205,196,0.5); background: transparent;
+  color: var(--planet-teal); padding: 5px 13px; border-radius: 50px;
+  cursor: pointer; transition: all 0.2s;
+}
+.voice-btn:hover, .voice-btn.speaking { background: rgba(78,205,196,0.15); border-color: var(--planet-teal); }
+.voice-btn.speaking { animation: voicePulse 1s ease-in-out infinite; }
+.replay-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  border: 2px solid rgba(255,255,255,0.2); background: transparent;
+  color: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 50px;
+  cursor: pointer; transition: all 0.2s;
+}
+.replay-btn:hover { border-color: rgba(255,255,255,0.5); color: white; }
+.sound-wave {
+  display: flex; align-items: center; gap: 3px; height: 20px;
+  margin-top: 6px; opacity: 0; transition: opacity 0.3s;
+}
+.sound-wave.active { opacity: 1; }
+.wave-bar { width: 4px; border-radius: 2px; background: var(--planet-teal); animation: waveAnim 0.8s ease-in-out infinite; }
+.wave-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { height: 22px; animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { height: 10px; animation-delay: 0.4s; }
+.wave-bar:nth-child(6) { height: 18px; animation-delay: 0.15s; }
+.wave-bar:nth-child(7) { height: 8px; animation-delay: 0.35s; }
+.speech-bubble-outer { flex: 1; max-width: 560px; position: relative; }
+.speech-bubble {
+  background: rgba(255,255,255,0.95); border-radius: 24px;
+  padding: 22px 28px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 3px solid rgba(78,205,196,0.4);
+  min-height: 240px; display: flex; flex-direction: column; position: relative;
+}
+.speech-bubble::before {
+  content: ""; position: absolute; left: -22px; top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 15px solid transparent; border-bottom: 15px solid transparent;
+  border-right: 22px solid rgba(255,255,255,0.95);
+}
+.bubble-name {
+  font-family: "Fredoka One", cursive; font-size: 0.95rem;
+  color: var(--planet-teal); margin-bottom: 8px; letter-spacing: 0.5px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.bubble-text {
+  font-size: 1rem; color: #1a1a3e; line-height: 1.6;
+  font-weight: 600; flex: 1; min-height: 140px;
+}
+.bubble-text .highlight { color: var(--rocket-orange); font-weight: 800; }
+.bubble-dot { width: 7px; height: 7px; border-radius: 50%; background: #d0d8f0; transition: background 0.3s; }
+.bubble-dot.active { background: var(--planet-teal); }
+.swipe-area {
+  padding: 0 0 20px; display: flex;
+  justify-content: center; align-items: center; gap: 12px;
+  z-index: 10; position: relative; flex-shrink: 0;
+}
+.swipe-btn {
+  font-family: "Fredoka One", cursive; font-size: 1rem;
+  background: var(--planet-teal); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 11px 30px; border-radius: 50px;
+  box-shadow: 0 5px 0 #1a8a85, 0 8px 24px rgba(78,205,196,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.swipe-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 7px 0 #1a8a85, 0 12px 30px rgba(78,205,196,0.4); }
+.swipe-btn:active { transform: scale(1.02) translateY(2px); box-shadow: 0 3px 0 #1a8a85; }
+.swipe-btn-prev {
+  background: transparent; border: 2.5px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6); box-shadow: none;
+  font-family: "Fredoka One", cursive; font-size: 0.95rem;
+  padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: all 0.15s;
+}
+.swipe-btn-prev:hover { border-color: rgba(255,255,255,0.6); color: white; }
+.moon-deco { position: absolute; right: -40px; top: 10%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fffbe0, #c8a800); opacity: 0.12; }
+.mars-deco { position: absolute; left: 2%; bottom: 10%; width: 85px; height: 85px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff8a5b, #8b2500); opacity: 0.25; }
+
+/* PAGE 3 */
+#page-mission { background: radial-gradient(ellipse at 30% 70%, #0e2a4a 0%, #060618 70%); }
+.mission-top { padding: 18px 36px 0; z-index: 5; position: relative; flex-shrink: 0; }
+.mission-label { font-family: "Fredoka One", cursive; font-size: clamp(1.4rem, 3vw, 2.2rem); color: var(--white); text-shadow: 2px 2px 0 rgba(255,107,53,0.4); }
+.mission-label span { color: var(--star-yellow); }
+.mission-scene {
+  flex: 1; display: flex; align-items: center;
+  justify-content: space-between; padding: 8px 48px 16px;
+  position: relative; overflow: hidden;
+}
+.mission-astro-wrap { position: relative; display: flex; flex-direction: column; align-items: center; z-index: 5; }
+.mission-astronaut-svg { width: 190px; animation: astroFloat 4s ease-in-out infinite; }
+.astro-shadow { width: 110px; height: 16px; border-radius: 50%; background: rgba(0,0,0,0.4); animation: shadowPulse 4s ease-in-out infinite; margin-top: -10px; }
+.sls-panel { z-index: 5; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.sls-label { font-family: "Fredoka One", cursive; font-size: 0.95rem; color: #a0b4d8; letter-spacing: 0.5px; text-align: right; }
+.sls-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.25rem;
+  background: linear-gradient(135deg, #ffd93d, #ff6b35); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 16px 34px; border-radius: 20px;
+  box-shadow: 0 6px 0 #8a3e00, 0 12px 40px rgba(255,107,53,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; overflow: hidden; white-space: nowrap;
+}
+.sls-btn::before {
+  content: ""; position: absolute; top: -50%; left: -60%;
+  width: 60%; height: 200%; background: rgba(255,255,255,0.25);
+  transform: skewX(-20deg); animation: shine 3s 1s infinite;
+}
+.sls-btn:hover { transform: scale(1.06) translateY(-3px); box-shadow: 0 9px 0 #8a3e00, 0 18px 50px rgba(255,107,53,0.5); }
+.sls-btn:active { transform: scale(1.02) translateY(3px); box-shadow: 0 3px 0 #8a3e00; }
+.ground-strip { position: absolute; bottom: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, transparent, var(--planet-teal), var(--nebula-purple), transparent); opacity: 0.5; }
+.crater1 { position: absolute; bottom: 8%; left: 28%; width: 80px; height: 25px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.08); }
+.crater2 { position: absolute; bottom: 14%; left: 52%; width: 50px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.05); }
+.small-planet-m { position: absolute; top: 8%; right: 12%; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ff6b9d, #5a0030); opacity: 0.5; }
+.ring-m { position: absolute; top: 8%; right: 10%; width: 90px; height: 28px; border-radius: 50%; border: 4px solid rgba(255,107,157,0.35); transform: rotate(-20deg); }
+.back-btn {
+  position: absolute; bottom: 20px; left: 36px;
+  font-family: "Fredoka One", cursive; font-size: 0.9rem;
+  background: transparent; border: 2px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5); cursor: pointer;
+  padding: 8px 18px; border-radius: 50px; transition: all 0.2s; z-index: 10;
+}
+.back-btn:hover { border-color: rgba(255,255,255,0.5); color: white; }
+
+.auth-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(5,5,25,0.9);
+  backdrop-filter: blur(10px);
+  display: flex;      
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.auth-gate-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.auth-gate-box{
+  background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
+  border-radius: 28px;
+  padding: 40px 36px 32px;
+  width: 420px;
+  max-width: 92vw;
+  border: 2px solid rgba(78,205,196,0.3);
+  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s;
+  text-align: center;
+}
+.auth-gate-overlay.open .auth-gate-box{
+  transform: scale(1) translateY(0);
+}
+.auth-gate-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+.auth-gate-title {
+  font-family: "Fredoka One", cursive;
+  font-size: 1.9rem;
+  color:  var(--star-yellow);
+  margin-bottom: 8px;
+}
+.auth-gate-sub {
+  color: #a0b4d8;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+.auth-gate-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.auth-gate-btn-primary {
+  font-family:  "Fredoka One", cursive;
+  font-size: 1.1rem;
+  background: var(--planet-teal);
+  color: var(--space-dark);
+  border: none;
+  cursor: pointer;
+  padding: 13px;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #1a8a85;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.auth-gate-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #1a8a85;
+}
+.auth-gate-btn-secondary {
+  font-family: "Fredoka One", cursive;
+  font-size: 1rem;
+  background: var(--star-yellow);
+  color: var(--space-dark);
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #c9a500;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.auth-gate-btn-secondary:hover{
+  transform: translate(-2px);
+  box-shadow: 0 6px 0 #1a8a85;
+}
+.auth-gate-btn-ghost {
+  font-family: "Fredoka One", cursive;
+  font-size: 0.9rem;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 14px;
+  transition: all 0.15s;
+}
+.auth-gate-btn-ghost:hover{
+  border-color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.8);
+}
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5,5,25,0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal-box{
+  background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
+  border-radius: 24px;
+  padding: 36px 36px 28px;
+  width: 400px;
+  max-width: 92vw;
+  border: 2px solid rgba(78,205,196,0.3);
+  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s;
+  position: relative;
+}
+.modal-overlay.open .modal-box {
+  transform: scale(1) translateY(0);
+}
+.modal-title{
+  font-family: "Fredoka One", cursive;
+  font-size: 1.8rem;
+  color: var(--star-yellow);
+  margin-bottom: 18px;
+}
+.modal-input{
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(78,205,196,0.3);
+  background: rgba(255,255,255,0.07);
+  color: white;
+  font-family: "Nunito", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.modal-input::placeholder{
+  color: rgba(255,255,255,0.35);
+}
+.modal-input:focus{
+  border-color: var(--planet-teal);
+}
+.modal-submit{
+  width: 100%;
+  padding: 13px;
+  font-family: "Fredoka One", cursive;
+  font-family: 1.1rem;
+  background: var(--planet-teal);
+  color: var(--space-dark);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1a8a85;
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-top: 4px;
+}
+.modal-submit:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #1a8a85;
+}
+.modal-close{
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.modal-close:hover{
+  background: rgba(255,255,255,0.2);
+}
+.modal-switch{
+  text-align: center;
+  margin-top: 14px;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.88rem;
+}
+.modal-switch a{
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.modal-guest-link a:hover{
+  color: rgba(255,255,255,0.85);
+}
+.modal-error{
+  background: rgba(255,107,157,0.15);
+  border: 1.5px solid rgba(255,107,157,0.5);
+  color:  #ff9ec4;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  display: none;
+}
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 50px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
+  border: 2px solid rgba(78,205,196,0.4); color: var(--star-yellow);
+  font-family: "Fredoka One", cursive; font-size: 1rem;
+  padding: 12px 24px; border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  opacity: 0; transition: all 0.4s ease; z-index: 300; white-space: nowrap;
+}
+.toast.toast-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* PAGE 4 – SLS INTRO — SCROLLABLE */
+#page-sls-intro {
+  background: radial-gradient(ellipse at 40% 30%, #0e1a4e 0%, #060618 80%);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.sls-intro-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.sls-star-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(78,205,196,0.08); }
+.sls-star-ring.r1 { width: 500px; height: 500px; top: -120px; right: -120px; }
+.sls-star-ring.r2 { width: 300px; height: 300px; bottom: -80px; left: -80px; border-color: rgba(255,107,157,0.08); }
+
+/* KEY FIX: use min-height instead of fixed flex centering so it grows to fit content */
+.sls-intro-content {
+  min-height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 24px 100px;
+  z-index: 2; position: relative;
+  text-align: center; gap: 6px;
+}
+.sls-intro-badge {
+  display: inline-block; background: rgba(78,205,196,0.15);
+  border: 1.5px solid rgba(78,205,196,0.4); color: var(--planet-teal);
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  padding: 4px 16px; border-radius: 50px; letter-spacing: 1.5px; margin-bottom: 4px;
+}
+.sls-intro-title { font-family: "Fredoka One", cursive; font-size: clamp(1.8rem,4.5vw,3rem); color: var(--white); line-height: 1.15; text-shadow: 3px 3px 0 rgba(78,205,196,0.2); }
+.sls-intro-title span { color: var(--star-yellow); }
+.sls-intro-sub { font-size: 1rem; color: #a0b4d8; font-weight: 600; margin: 4px 0 20px; }
+
+.astronaut-picker{
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.picker-card{
+  position: relative;
+  cursor: pointer;
+  background: rgba(255,255,255,0.04);
+  border: 2.5px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 22px 28px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),border-color 0.22s, box-shadow 0.22s;
+  min-width: 170px;
+  overflow: hidden;
+}
+.picker-card:hover{
+  transform: translate(-6px) scale(1.03);
+  border-color: rgba(255,255,255,0.25);
+}
+.picker-card.selected-female{
+  border-color: var(--planet-pink);
+  box-shadow: 0 0 0 3px rgba(255,107,157,0.2), 0 16px 48px rgba(255,107,157,0.25);
+}
+.picker-card.selected-male{
+  border-color: var(--planet-teal);
+  box-shadow:0 0 0 3px rgba(78,205,196,0.2), 0 16px 48px rgba(78,205,196,0.25);
+}
+.picker-glow{
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.female-glow{
+  background: radial-gradient(ellipse at 50% 20%, rgba(255,107,157,0.18), transparent 70%);
+}
+.male-glow{
+  background: radial-gradient(ellipse at 50% 20%, rgba(78,205,196,0.18), transparent 70%);
+}
+.picker-card.selected-female .female-glow, .picker-card.selected-male .male-glow{
+  opacity: 1;
+}
+.picker-svg{
+  width: 110px;
+  animation: astroFloat 3.5s ease-in-out infinite;
+}
+#pick-male .picker-svg {
+  animation-delay: -1.5s;
+}
+.picker-label {
+  font-family: "Fredoka One", cursive;
+  font-size: 0.95rem;
+  color: var(--star-yellow);
+}
+.picker-sub{
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 700;
+}
+.picker-check{
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--planet-teal);
+  color: var(--space-dark);
+  font-size: 0.85rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.25s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+#pick-female.selected-female .picker-check{
+  opacity: 1;
+  transform: scale(1);
+  background: var(--planet-pink);
+}
+#pick-male.selected-male .picker-check{
+  opacity: 1;
+  transform: scale(1);
+  background: var(--planet-teal);
+}
+.sls-proceed-btn{
+  font-family: "Fredoka One", cursive;
+  font-size: 1.15rem;
+  background: linear-gradient(135deg, var(--planet-teal), var(--nebula-purple));
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 14px 44px;
+  border-radius: 60px;
+  box-shadow: 0 6px 0 #1a3080, 0 12px 40px rgba(78,205,196,0.3);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  opacity: 0.4;
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+}
+.sls-proceed-btn:not([disabled]) {
+  opacity: 1;
+  pointer-events: all;
+}
+.sls-proceed-btn:not([disabled]):hover{
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 0 #1a3080, 0 20px 50px rgba(78,205,196,0.4);
+}
+.sls-proceed-btn:not([disabled]):active {
+  transform: scale(1.02) translateY(2px);
+  box-shadow: 0 4px 0 #1a3080;
+}
+/* PAGE 5 */
+#page-dashboard { background: radial-gradient(ellipse at 20% 20%, #0e1a4e 0%, #060618 75%); }
+.dashboard-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 36px 0; z-index: 5; position: relative; flex-shrink: 0;
+}
+.dash-badge {
+  font-family: "Fredoka One", cursive; font-size: 0.78rem;
+  color: var(--planet-teal); letter-spacing: 1.5px;
+  background: rgba(78,205,196,0.1); border: 1.5px solid rgba(78,205,196,0.3);
+  padding: 3px 14px; border-radius: 50px; display: inline-block; margin-bottom: 4px;
+}
+.dash-title { font-family: "Fredoka One", cursive; font-size: clamp(1.5rem,3.5vw,2.4rem); color: var(--white); line-height: 1.1; }
+.dash-title span { color: var(--star-yellow); }
+.dash-astronaut-mini { width: 80px; flex-shrink: 0; }
+.dash-astronaut-mini svg { width: 80px; animation: astroFloat 3.5s ease-in-out infinite; }
+.dashboard-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; padding: 16px 28px 10px;
+  z-index: 5; position: relative; flex: 1;
+}
+.dash-card {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.09);
+  border-radius: 20px; padding: 18px 20px;
+  transition: border-color 0.2s, transform 0.2s;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.dash-card:hover{
+  border-color: rgba(78,205,196,0.2);
+  transform: translateY(-2px);
+}
+.dash-card-icon{
+  font-size: 1.4rem;
+}
+.dash-card-label{
+  font-family: "Fredoka One", cursive;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.rank-card{
+  grid-column: 1/-1;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.rank-card .dash-card-icon{
+  font-size: 2rem;
+}
+.rank-card > div:first-child{
+  flex-shrink: 0;
+}
+.dash-rank-badge{
+  font-family: "Fredoka One", cursive;
+  font-size: 1.6rem;
+  color: var(--star-yellow);
+  text-shadow: 2px 2px 0 rgba(255,217,61,0.3);
+  flex-shrink: 0;
+}
+.dash-xp-bar-wrap{
+  flex: 1;
+  min-width: 140px;
+}
+.dash-xp-label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.dash-xp-label span{
+  color: var(--planet-teal);
+  font-size: 0.9rem;
+}
+.dash-xp-track{
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.dash-xp-fill{
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--planet-teal), var(--nebula-purple));
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+}
+.missions-list{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mission-item{
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 8px;
+}
+.mission-item.done {
+  color: #a8f4f0;
+  background: rgba(78,205,196,0.08);
+}
+.mission-item-locked{
+  color: rgba(255,255,255,0.25);
+}
+.tag-list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.tag{
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 11px;
+  border-radius: 50px;
+}
+.strength-tag{
+  background: rgba(78,205,196,0.15);
+  color: var(--planet-teal);
+  border: 1px solid rgba(78,205,196,0.3);
+}
+.training-card{
+  grid-column: 1/-1;
+}
+.training-list{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 2px;
+}
+.training-item{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.training-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  background:  var(--planet-teal);
+  box-shadow: 0 0 8px rgba(78,205,196,0.6);
+}
+.training-dot.dim{
+  background: rgba(255,255,255,0.15);
+  box-shadow: none;
+}
+/*start from here, In Shaa Allah*/
+.dash-proceed-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.15rem;
+  background: linear-gradient(135deg, var(--rocket-orange), var(--planet-pink));
+  color: white; border: none; cursor: pointer;
+  padding: 14px 40px; border-radius: 60px;
+  box-shadow: 0 6px 0 #a02060, 0 12px 40px rgba(255,107,53,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.dash-proceed-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 8px 0 #a02060, 0 20px 50px rgba(255,107,53,0.5); }
+.dash-proceed-btn:active { transform: scale(1.02) translateY(2px); box-shadow: 0 4px 0 #a02060; }
+.hackclub-ribbon { position: fixed; bottom: 14px; right: 16px; z-index: 50; font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 700; letter-spacing: 1px; }
+.typing-cursor { display: inline-block; width: 2px; height: 1.1em; background: #1a1a3e; margin-left: 2px; animation: blink 0.8s step-end infinite; vertical-align: middle; }
+
+/* ANIMATIONS */
+@keyframes floatAnim { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes astroFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-18px) rotate(2deg)} }
+@keyframes talkBounce { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-6px) rotate(1deg)} }
+@keyframes rocketFloat { 0%,100%{transform:translateY(0) rotate(3deg)} 50%{transform:translateY(-24px) rotate(-1deg)} }
+@keyframes bubbleFloat { 0%,100%{transform:scale(1) translateY(0)} 50%{transform:scale(1) translateY(-24px)} }
+@keyframes shadowPulse { 0%,100%{transform:scaleX(1);opacity:0.4} 50%{transform:scaleX(0.75);opacity:0.2} }
+@keyframes shine { 0%{left:-60%} 30%,100%{left:120%} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+@keyframes voicePulse { 0%,100%{box-shadow:0 0 0 0 rgba(78,205,196,0.5)} 50%{box-shadow:0 0 0 8px rgba(78,205,196,0)} }
+@keyframes waveAnim { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+@keyframes scrollBounce { 0%,100%{transform:rotate(45deg) translateY(0);opacity:1} 50%{transform:rotate(45deg) translateY(4px);opacity:0.4} }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .home-content { padding: 10px 20px 80px; flex-direction: column; justify-content: flex-start; gap: 20px; min-height: unset; }
+  .home-illustration { position: relative; width: 100%; height: 220px; right: auto; bottom: auto; }
+  .rocket-svg { width: 180px; }
+  .rocket-bubble { top: 2%; right: 50%; font-size: 0.85rem; }
+  .astro-scene { flex-direction: column; padding: 8px 16px; gap: 12px; }
+  .speech-bubble { min-height: 180px; }
+  .speech-bubble::before { display: none; }
+  .mission-scene { flex-direction: column; padding: 8px 20px; justify-content: center; }
+  .dashboard-grid { grid-template-columns: 1fr; padding: 12px 16px 10px; }
+  .rank-card, .training-card { grid-column: 1; }
+  .astronaut-picker { gap: 14px; }
+  .picker-card { min-width: 140px; padding: 16px 18px 14px; }
+  .picker-svg { width: 88px; }
+  .dashboard-header { padding: 14px 16px 0; }
+  .sls-intro-content { padding: 30px 16px 90px; }
+}
+  </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- PAGE 1: HOME -->
+<div class="page active" id="page-home">
+  <nav class="nav" id="main-nav">
+    <button class="nav-btn guest" id="nav-guest-btn">Continue as Guest</button>
+    <button class="nav-btn login" id="nav-login-btn">Log In</button>
+    <button class="nav-btn signup" id="nav-signup-btn">Create Account ✨</button>
+  </nav>
+
+  <div class="home-content">
+    <div class="planet p1"></div>
+    <div class="planet p2"></div>
+    <div class="planet p3"></div>
+
+    <div class="home-text">
+      <div class="hackclub-badge">🚀 HACK CLUB STARDANCE</div>
+      <h1 class="home-title">Explore<br />the <span>Moon</span><br />with ARTEMIS!</h1>
+      <p class="home-subtitle">Join a cosmic adventure, learn about the Artemis missions, and help engineer the Space Launch System!</p>
+      <button class="letsgo-btn" id="letsgo-main-btn">Let's Go &nbsp;🚀</button>
+    </div>
+
+    <div class="home-illustration">
+      <div class="rocket-bubble" id="rocket-bubble">
+        <span id="rocket-bubble-text"></span>
+        <span class="rocket-bubble-cursor"></span>
+        <div class="rocket-bubble-tail"></div>
+      </div>
+
+      <svg class="rocket-svg" viewBox="0 0 300 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="150" cy="220" rx="52" ry="140" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+        <path d="M150 40 C120 80 100 130 98 180 L202 180 C200 130 180 80 150 40Z" fill="#FF6B35" stroke="#c93e00" stroke-width="2"/>
+        <circle cx="150" cy="200" r="28" fill="#4ECDC4" stroke="#2aa8a3" stroke-width="3"/>
+        <circle cx="150" cy="200" r="18" fill="#a8f4f0" opacity="0.6"/>
+        <circle cx="145" cy="198" r="4" fill="#1a1a3e"/>
+        <circle cx="158" cy="198" r="4" fill="#1a1a3e"/>
+        <path d="M143 207 Q152 213 162 207" stroke="#1a1a3e" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M98 300 L60 370 L98 350Z" fill="#FF6B9D" stroke="#c93e00" stroke-width="2"/>
+        <path d="M202 300 L240 370 L202 350Z" fill="#FF6B9D" stroke="#c93e00" stroke-width="2"/>
+        <ellipse cx="150" cy="378" rx="30" ry="20" fill="#FFD93D" opacity="0.9"/>
+        <ellipse cx="150" cy="388" rx="18" ry="28" fill="#FF6B35" opacity="0.85"/>
+        <ellipse cx="150" cy="400" rx="10" ry="20" fill="white" opacity="0.7"/>
+        <circle cx="70" cy="100" r="4" fill="#FFD93D"/>
+        <circle cx="240" cy="150" r="3" fill="#FFD93D"/>
+        <circle cx="55" cy="250" r="5" fill="#A855F7"/>
+        <circle cx="260" cy="280" r="4" fill="#4ECDC4"/>
+      </svg>
+
+      <div class="scroll-hint" id="scroll-hint">
+        <span>scroll down</span>
+        <div class="scroll-arrow"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: ASTRONAUT SPEAKS -->
+<div class="page" id="page-astro">
+  <div class="moon-deco"></div>
+  <div class="mars-deco"></div>
+
+  <div class="astro-scene">
+    <div class="astronaut-wrap">
+      <svg class="astronaut-svg" viewBox="0 0 180 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="52" y="120" width="76" height="90" rx="22" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+        <circle cx="90" cy="90" r="52" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+        <ellipse cx="90" cy="90" rx="36" ry="38" fill="#4ECDC4" opacity="0.85"/>
+        <ellipse cx="82" cy="82" rx="10" ry="14" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="82" cy="88" r="5" fill="#1a2e5e"/>
+        <circle cx="100" cy="88" r="5" fill="#1a2e5e"/>
+        <path id="astro-mouth" d="M79 100 Q91 108 103 100" stroke="#1a2e5e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <rect x="20" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+        <rect x="126" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+        <ellipse cx="37" cy="187" rx="16" ry="11" fill="#FF6B35"/>
+        <ellipse cx="143" cy="187" rx="16" ry="11" fill="#FF6B35"/>
+        <rect x="60" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+        <rect x="92" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+        <ellipse cx="74" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+        <ellipse cx="106" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+        <rect x="112" y="130" width="26" height="40" rx="8" fill="#a0aec8" stroke="#8090b8" stroke-width="2"/>
+        <circle cx="78" cy="150" r="10" fill="#FF6B35" opacity="0.7"/>
+        <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">NASA</text>
+      </svg>
+
+      <div class="sound-wave" id="sound-wave">
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <div class="voice-controls">
+        <button class="voice-btn" id="voice-toggle-btn" onclick="toggleSpeech()">🔊 Listen</button>
+        <button class="replay-btn" onclick="replayVoice()">↺ Replay</button>
+      </div>
+
+      <div style="margin-top:10px;display:flex;gap:6px">
+        <div id="dot0" class="bubble-dot active"></div>
+        <div id="dot1" class="bubble-dot"></div>
+        <div id="dot2" class="bubble-dot"></div>
+        <div id="dot3" class="bubble-dot"></div>
+      </div>
+    </div>
+
+    <div class="speech-bubble-outer">
+      <div class="speech-bubble">
+        <div class="bubble-name">👩‍🚀 Commander Lidika</div>
+        <div class="bubble-text" id="bubble-text">
+          <span id="typed-text"></span>
+          <span class="typing-cursor" id="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swipe-area">
+    <button class="swipe-btn-prev" id="prev-btn" onclick="prevSlide()" style="display:none">← Back</button>
+    <button class="swipe-btn" id="next-btn" onclick="nextSlide()">Continue &nbsp;→</button>
+  </div>
+</div>
+
+<!-- PAGE 3: MISSION -->
+<div class="page" id="page-mission">
+  <div class="mission-top">
+    <h2 class="mission-label">Let's go for a <span>Mission!</span> 🌙</h2>
+  </div>
+  <div class="mission-scene">
+    <div class="planet small-planet-m"></div>
+    <div class="ring-m"></div>
+    <div class="crater1"></div>
+    <div class="crater2"></div>
+    <div class="mission-astro-wrap">
+      <svg class="mission-astronaut-svg" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="60" y="130" width="80" height="96" rx="22" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+        <circle cx="100" cy="96" r="54" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+        <ellipse cx="100" cy="96" rx="38" ry="40" fill="#FFD93D" opacity="0.85"/>
+        <ellipse cx="90" cy="87" rx="11" ry="14" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="88" cy="93" r="5.5" fill="#1a2e5e"/>
+        <circle cx="112" cy="93" r="5.5" fill="#1a2e5e"/>
+        <path d="M83 108 Q101 120 119 108" stroke="#1a2e5e" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M140 145 Q170 130 195 110" stroke="#E8EEF8" stroke-width="22" stroke-linecap="round"/>
+        <ellipse cx="196" cy="109" rx="14" ry="10" fill="#FF6B35"/>
+        <rect x="24" y="138" width="38" height="52" rx="19" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+        <ellipse cx="43" cy="193" rx="16" ry="10" fill="#FF6B35"/>
+        <rect x="62" y="216" width="30" height="46" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2" transform="rotate(-12 62 216)"/>
+        <rect x="98" y="212" width="30" height="46" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2" transform="rotate(8 98 212)"/>
+        <ellipse cx="72" cy="265" rx="20" ry="11" fill="#1a2e5e" transform="rotate(-12 72 265)"/>
+        <ellipse cx="115" cy="260" rx="20" ry="11" fill="#1a2e5e" transform="rotate(8 115 260)"/>
+        <rect x="128" y="138" width="28" height="44" rx="8" fill="#a0aec8" stroke="#8090b8" stroke-width="2"/>
+        <line x1="156" y1="135" x2="156" y2="110" stroke="#a0aec8" stroke-width="2"/>
+        <rect x="156" y="107" width="22" height="14" rx="2" fill="#FF6B35"/>
+      </svg>
+      <div class="astro-shadow"></div>
+    </div>
+    <div class="sls-panel">
+      <div class="sls-label">Ready to build a rocket?</div>
+      <button class="sls-btn" onclick="goToPage('page-sls-intro')">🛸 Let's Engineer the SLS</button>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.3);margin-top:8px;text-align:right">Space Launch System</div>
+    </div>
+    <div class="ground-strip"></div>
+  </div>
+  <button class="back-btn" onclick="goToPage('page-astro')">← Back</button>
+</div>
+
+<!-- PAGE 4: SLS INTRO -->
+<div class="page" id="page-sls-intro">
+  <div class="sls-intro-bg">
+    <div class="sls-star-ring r1"></div>
+    <div class="sls-star-ring r2"></div>
+  </div>
+  <div class="sls-intro-content">
+    <div class="sls-intro-badge">🛸 SPACE LAUNCH SYSTEM</div>
+    <h2 class="sls-intro-title">Let's get introduced<br/>with the <span>System</span></h2>
+    <p class="sls-intro-sub">First — choose your astronaut. Who's suiting up for the mission?</p>
+
+    <div class="astronaut-picker">
+      <!-- FEMALE -->
+      <div class="picker-card" id="pick-female" onclick="selectAstronaut('female')">
+        <div class="picker-glow female-glow"></div>
+        <svg class="picker-svg" viewBox="0 0 180 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="120" width="76" height="90" rx="22" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+          <circle cx="90" cy="90" r="52" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+          <ellipse cx="90" cy="90" rx="36" ry="38" fill="#FF6B9D" opacity="0.75"/>
+          <ellipse cx="82" cy="82" rx="10" ry="14" fill="rgba(255,255,255,0.25)"/>
+          <circle cx="80" cy="88" r="5" fill="#1a2e5e"/>
+          <circle cx="100" cy="88" r="5" fill="#1a2e5e"/>
+          <path d="M77 100 Q90 112 104 100" stroke="#1a2e5e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M75 83 Q78 79 82 82" stroke="#1a2e5e" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path d="M96 82 Q100 78 104 82" stroke="#1a2e5e" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <rect x="20" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+          <rect x="126" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+          <ellipse cx="37" cy="187" rx="16" ry="11" fill="#FF6B9D"/>
+          <ellipse cx="143" cy="187" rx="16" ry="11" fill="#FF6B9D"/>
+          <rect x="60" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+          <rect x="92" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+          <ellipse cx="74" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+          <ellipse cx="106" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+          <rect x="112" y="130" width="26" height="40" rx="8" fill="#a0aec8" stroke="#8090b8" stroke-width="2"/>
+          <circle cx="78" cy="150" r="10" fill="#FF6B9D" opacity="0.85"/>
+          <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text>
+          <path d="M50 68 Q58 40 90 38 Q122 40 130 68" stroke="#c93e00" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.5"/>
+        </svg>
+        <div class="picker-label">👩‍🚀 Commander <span>Lidika</span></div>
+        <div class="picker-sub">She / Her</div>
+        <div class="picker-check" id="check-female">✓</div>
+      </div>
+
+      <!-- MALE -->
+      <div class="picker-card" id="pick-male" onclick="selectAstronaut('male')">
+        <div class="picker-glow male-glow"></div>
+        <svg class="picker-svg" viewBox="0 0 180 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="120" width="76" height="90" rx="22" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+          <circle cx="90" cy="90" r="52" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+          <ellipse cx="90" cy="90" rx="36" ry="38" fill="#4ECDC4" opacity="0.75"/>
+          <ellipse cx="82" cy="82" rx="10" ry="14" fill="rgba(255,255,255,0.25)"/>
+          <circle cx="80" cy="88" r="5.5" fill="#1a2e5e"/>
+          <circle cx="100" cy="88" r="5.5" fill="#1a2e5e"/>
+          <path d="M78 101 Q90 110 103 101" stroke="#1a2e5e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="20" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+          <rect x="126" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+          <ellipse cx="37" cy="187" rx="16" ry="11" fill="#FF6B35"/>
+          <ellipse cx="143" cy="187" rx="16" ry="11" fill="#FF6B35"/>
+          <rect x="60" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+          <rect x="92" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+          <ellipse cx="74" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+          <ellipse cx="106" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+          <rect x="112" y="130" width="26" height="40" rx="8" fill="#a0aec8" stroke="#8090b8" stroke-width="2"/>
+          <circle cx="78" cy="150" r="10" fill="#FF6B35" opacity="0.85"/>
+          <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text>
+        </svg>
+        <div class="picker-label">👨‍🚀 Commander <span>Orion</span></div>
+        <div class="picker-sub">He / Him</div>
+        <div class="picker-check" id="check-male">✓</div>
+      </div>
+    </div>
+
+    <button class="sls-proceed-btn" id="sls-proceed-btn" onclick="goToDashboard()" disabled>Begin Mission &nbsp;🚀</button>
+  </div>
+  <button class="back-btn" onclick="goToPage('page-mission')">← Back</button>
+</div>
+
+<!-- PAGE 5: DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard-header">
+    <div class="dash-title-wrap">
+      <div class="dash-badge">🛸 MISSION CONTROL</div>
+      <h2 class="dash-title">Your <span>Dashboard</span></h2>
+    </div>
+    <div class="dash-astronaut-mini" id="dash-astronaut-mini"></div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dash-card rank-card">
+      <div class="dash-card-icon">🏅</div>
+      <div class="dash-card-label">Astronaut Rank</div>
+      <div class="dash-rank-badge" id="dash-rank">Cadet</div>
+      <div class="dash-xp-bar-wrap">
+        <div class="dash-xp-label"><span id="dash-xp">0</span> XP &nbsp;/&nbsp; 500 XP to next rank</div>
+        <div class="dash-xp-track"><div class="dash-xp-fill" id="dash-xp-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="dash-card missions-card">
+      <div class="dash-card-icon">🌙</div>
+      <div class="dash-card-label">Completed Missions</div>
+      <div class="missions-list">
+        <div class="mission-item done">✅ Artemis Orientation</div>
+        <div class="mission-item done">✅ Meet Commander Lidika</div>
+        <div class="mission-item locked">🔒 SLS Engineering</div>
+        <div class="mission-item locked">🔒 Lunar Trajectory Calc</div>
+        <div class="mission-item locked">🔒 Moonwalk Simulation</div>
+      </div>
+    </div>
+
+    <div class="dash-card strengths-card">
+      <div class="dash-card-icon">💪</div>
+      <div class="dash-card-label">Strengths</div>
+      <div class="tag-list">
+        <span class="tag strength-tag">🚀 Curiosity</span>
+        <span class="tag strength-tag">🧭 Navigation</span>
+        <span class="tag strength-tag">📡 Communication</span>
+      </div>
+    </div>
+
+    <div class="dash-card weak-card">
+      <div class="dash-card-icon">🎯</div>
+      <div class="dash-card-label">Areas to Improve</div>
+      <div class="tag-list">
+        <span class="tag weak-tag">⚙️ Engineering</span>
+        <span class="tag weak-tag">🧮 Calculations</span>
+      </div>
+    </div>
+
+    <div class="dash-card training-card">
+      <div class="dash-card-icon">📋</div>
+      <div class="dash-card-label">Recommended Training</div>
+      <div class="training-list">
+        <div class="training-item">
+          <div class="training-dot"></div>
+          <div><div class="training-name">SLS Rocket Engineering</div><div class="training-desc">Build and tune the Space Launch System</div></div>
+          <div class="training-badge next">Next</div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot dim"></div>
+          <div><div class="training-name">Orbital Mechanics 101</div><div class="training-desc">Basic trajectory & delta-v calculations</div></div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot dim"></div>
+          <div><div class="training-name">Lunar Surface Ops</div><div class="training-desc">Moonwalk procedure & equipment</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-footer">
+    <button class="dash-proceed-btn" onclick="showToast('🚀 SLS Engineering Module launching soon! In Shaa Allah!')">🛸 Start SLS Engineering &nbsp;→</button>
+  </div>
+  <button class="back-btn" onclick="goToPage('page-sls-intro')">← Back</button>
+</div>
+
+<!-- AUTH GATE -->
+<div class="auth-gate-overlay" id="auth-gate">
+  <div class="auth-gate-box">
+    <div class="auth-gate-icon">🚀</div>
+    <div class="auth-gate-title">Ready for Launch?</div>
+    <div class="auth-gate-sub">Create a free account to save your progress and earn astronaut ranks — or just explore as a guest!</div>
+    <div class="auth-gate-btns">
+      <button class="auth-gate-btn-primary" onclick="openModalFromGate('login')">👾 Log In</button>
+      <button class="auth-gate-btn-secondary" onclick="openModalFromGate('signup')">✨ Create Free Account</button>
+      <button class="auth-gate-btn-ghost" onclick="continueAsGuest()">Continue as Guest — no account needed</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">👾 Log In</div>
+    <div id="modal-name-wrap" style="display:none">
+      <input class="modal-input" type="text" placeholder="Your Name 🌟" id="modal-name"/>
+    </div>
+    <input class="modal-input" type="email" placeholder="Email" id="modal-user"/>
+    <input class="modal-input" type="password" placeholder="Password 🔐" id="modal-pass"/>
+    <div class="modal-error" id="modal-error"></div>
+    <button class="modal-submit" id="modal-submit-btn">Let's Go! 🚀</button>
+    <div class="modal-switch" id="modal-switch">
+      Don't have an account? <a onclick="switchModal('signup')">Sign Up</a>
+    </div>
+    <div class="modal-guest-link">
+      Or <a onclick="continueAsGuest()">continue as guest</a> — no account needed
+    </div>
+  </div>
+</div>
+
+<div class="hackclub-ribbon">HACK CLUB STARDANCE</div>
+
+<script>
+// STARS
+const canvas = document.getElementById("stars-canvas");
+const ctx = canvas.getContext("2d");
+let stars = [];
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2.2+0.3,
+      speed: Math.random()*0.015+0.005, phase: Math.random()*Math.PI*2,
+      color: ["#ffffff","#FFD93D","#4ECDC4","#A855F7"][Math.floor(Math.random()*4)] });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const t = Date.now()/1000;
+  stars.forEach(s => {
+    const alpha = 0.3+0.7*(0.5+0.5*Math.sin(t*s.speed*10+s.phase));
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = s.color+Math.floor(alpha*255).toString(16).padStart(2,"0"); ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resizeCanvas(); initStars(); drawStars();
+window.addEventListener("resize", () => { resizeCanvas(); initStars(); });
+// AUTH STATE
+const accounts = {};
+let currentUser = null;
+let isGuest = false;
+function isAuthenticated() { return currentUser !== null || isGuest; }
+
+function updateNavForUser() {
+  const nav = document.getElementById("main-nav");
+  if (!nav) return;
+  if (currentUser) {
+    nav.innerHTML = `<div class="user-chip">
+      <div class="user-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+      <span class="user-name">Hi, ${currentUser.name}!</span>
+      <button class="logout-btn" id="logout-btn">Log Out</button></div>`;
+    document.getElementById("logout-btn").addEventListener("click", logOut);
+  } else if (isGuest) {
+    nav.innerHTML = `<div class="guest-chip">
+      <div class="guest-icon">👾</div>
+      <span class="guest-label">Guest Explorer</span>
+      <button class="join-btn" id="join-btn">Join for free ✨</button></div>`;
+    document.getElementById("join-btn").addEventListener("click", () => openModal("signup"));
+  } else {
+    nav.innerHTML = `
+      <button class="nav-btn guest" id="nav-guest-btn">Continue as Guest</button>
+      <button class="nav-btn login" id="nav-login-btn">Log In</button>
+      <button class="nav-btn signup" id="nav-signup-btn">Create Account ✨</button>`;
+    document.getElementById("nav-guest-btn").addEventListener("click", continueAsGuest);
+    document.getElementById("nav-login-btn").addEventListener("click", () => openModal("login"));
+    document.getElementById("nav-signup-btn").addEventListener("click", () => openModal("signup"));
+  }
+}
+
+function continueAsGuest() {
+  isGuest = true; currentUser = null;
+  closeModal(); closeAuthGate();
+  updateNavForUser();
+  showToast("Exploring as Guest 👾 — create an account to save progress!");
+  if (_pendingNavTarget) { const t = _pendingNavTarget; _pendingNavTarget = null; goToPage(t); }
+}
+function logOut() { currentUser = null; isGuest = false; updateNavForUser(); showToast("Logged out. See you among the stars! 🌌"); }
+function handleSignup() {
+  const name = document.getElementById("modal-name").value.trim();
+  const email = document.getElementById("modal-user").value.trim();
+  const pass = document.getElementById("modal-pass").value;
+  hideModalError();
+  if (!name||!email||!pass) { showModalError("Please fill in all fields! 🚀"); return; }
+  if (accounts[email]) { showModalError("That email is already registered! Try logging in."); return; }
+  accounts[email] = {name,email,pass};
+  currentUser = {name,email}; isGuest = false;
+  closeModal(); closeAuthGate(); updateNavForUser();
+  showToast(`Welcome aboard, ${name}! 🚀`);
+  if (_pendingNavTarget) { const t = _pendingNavTarget; _pendingNavTarget = null; goToPage(t); }
+}
+function handleLogin() {
+  const email = document.getElementById("modal-user").value.trim();
+  const pass = document.getElementById("modal-pass").value;
+  hideModalError();
+  if (!email||!pass) { showModalError("Please fill in all fields! 🚀"); return; }
+  const acc = accounts[email];
+  if (!acc) { showModalError("Hmm, we don't recognise that email."); return; }
+  if (acc.pass !== pass) { showModalError("Wrong password! Try again. 🔐"); return; }
+  currentUser = {name:acc.name,email}; isGuest = false;
+  closeModal(); closeAuthGate(); updateNavForUser();
+  showToast(`Welcome back, ${acc.name}! 👋`);
+  if (_pendingNavTarget) { const t = _pendingNavTarget; _pendingNavTarget = null; goToPage(t); }
+}
+function showModalError(msg) { const e=document.getElementById("modal-error"); if(e){e.textContent=msg;e.style.display="block";} }
+function hideModalError() { const e=document.getElementById("modal-error"); if(e) e.style.display="none"; }
+function showToast(msg) {
+  const t = document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.classList.add("toast-show"),10);
+  setTimeout(()=>{t.classList.remove("toast-show");setTimeout(()=>t.remove(),400);},3000);
+}
+
+// AUTH GATE
+let _pendingNavTarget = null;
+function openAuthGate(targetPageId) { _pendingNavTarget = targetPageId||null; document.getElementById("auth-gate").classList.add("open"); }
+function closeAuthGate() { document.getElementById("auth-gate").classList.remove("open"); }
+function openModalFromGate(mode) { closeAuthGate(); openModal(mode); }
+
+// PAGE NAVIGATION
+function handleLetsGo() {
+  if (isAuthenticated()) goToPage("page-astro");
+  else openAuthGate("page-astro");
+}
+function goToPage(targetId) {
+  if (targetId !== "page-home" && !isAuthenticated()) { openAuthGate(targetId); return; }
+  const current = document.querySelector(".page.active");
+  const target = document.getElementById(targetId);
+  if (!target || current===target) return;
+  stopSpeech();
+  if (targetId === "page-sls-intro") target.scrollTop = 0;
+  current.classList.add("exit-up"); current.classList.remove("active");
+  setTimeout(()=>current.classList.remove("exit-up"),600);
+  setTimeout(()=>{ target.classList.add("active"); if(targetId==="page-astro") startSlides(); },80);
+}
+
+const ROCKET_MESSAGES = ["Hello! 👋","To start your voyage,\nscroll down! ⬇️"];
+function initRocketBubble() {
+  const bubble = document.getElementById("rocket-bubble");
+  const textEl = document.getElementById("rocket-bubble-text");
+  const hint = document.getElementById("scroll-hint");
+  if (!bubble||!textEl) return;
+  let msgIndex=0,charIndex=0,typing=null;
+  setTimeout(()=>bubble.classList.add("visible"),800);
+  function typeChar() {
+    const msg = ROCKET_MESSAGES[msgIndex];
+    if (charIndex<=msg.length) {
+      textEl.innerHTML = msg.slice(0,charIndex).replace(/\n/g,"<br>"); charIndex++;
+      typing = setTimeout(typeChar,charIndex===1?120:55);
+    } else {
+      typing = setTimeout(()=>{
+        if (msgIndex<ROCKET_MESSAGES.length-1) eraseChar();
+        else { bubble.classList.add("floating"); if(hint) hint.classList.add("visible"); }
+      }, msgIndex===0?1000:3500);
+    }
+  }
+  function eraseChar() {
+    const msg = ROCKET_MESSAGES[msgIndex];
+    if (charIndex>0) { charIndex--; textEl.innerHTML=msg.slice(0,charIndex).replace(/\n/g,"<br>"); typing=setTimeout(eraseChar,35); }
+    else { msgIndex++; charIndex=0; typing=setTimeout(typeChar,300); }
+  }
+  setTimeout(typeChar,1200);
+}
+// SPEECH SLIDES
+function getGreetingName() { return currentUser?currentUser.name:null; }
+function buildSlides() {
+  const name = getGreetingName();
+  const greeting = name?`Hello, ${name}!`:isGuest?"Hello, curious explorer!":"Hello, young explorer!";
+  const greetingHTML = name?`👋 <b>Hello, ${name}!</b>`:isGuest?`👋 <b>Hello, curious explorer!</b>`:`👋 <b>Hello, young explorer!</b>`;
+  const slidesText = [
+    `${greeting} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to Stardance — your mission to the Moon starts right here!`,
+    `Here's the thing — space science is hard, and most kids never get to truly feel what it's like to BE an astronaut. Math, physics, engineering... they seem scary when they're just numbers on a page. Kids deserve better than textbooks!`,
+    `That's why Stardance turns the entire Moon mission into YOUR adventure! You'll engineer the rocket, train like a real astronaut, do actual calculations to launch and land, and even explore the lunar surface — all inside an interactive game built just for you!`,
+    `And the best part? Stardance watches how YOU perform — tracking your strengths, spotting where you need help, and giving you a personal astronaut score after every mission. By the time you're done, you'll think like a real space engineer!`,
+  ];
+  const slidesHTML = [
+    `${greetingHTML} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to <span class="highlight">Stardance</span> — your mission to the Moon starts right here! 🌙`,
+    `🌍 Here's the problem — space science feels <span class="highlight">scary and far away</span> for most kids. Math, physics, engineering... they're just numbers on a page. Kids like YOU deserve to actually <b>feel</b> what it's like to be an astronaut — not just read about it. 😔`,
+    `🚀 That's why <span class="highlight">Stardance</span> turns the Moon mission into YOUR adventure! Engineer the rocket, train like an astronaut, do real calculations to launch and land, and explore the lunar surface — all inside an <b>interactive game built just for you!</b> 🌕`,
+    `🏆 And Stardance <span class="highlight">watches how YOU perform</span> — tracking your strengths, spotting where you need help, and giving you a <b>personal astronaut score</b> after every mission. By the end, you'll think like a real space engineer! 💫`,
+  ];
+  return {slidesText,slidesHTML};
+}
+
+let currentSlide=0,isSpeaking=false,speechEnabled=true,currentUtter=null;
+function startSlides() { currentSlide=0; renderSlide(0); }
+function renderSlide(idx) {
+  const {slidesHTML} = buildSlides();
+  const el = document.getElementById("typed-text");
+  for(let i=0;i<4;i++){const d=document.getElementById("dot"+i);if(d)d.classList.toggle("active",i===idx);}
+  const prevBtn=document.getElementById("prev-btn"); if(prevBtn) prevBtn.style.display=idx>0?"block":"none";
+  const nextBtn=document.getElementById("next-btn"); if(nextBtn) nextBtn.textContent=idx===slidesHTML.length-1?"Let's Mission! 🌙":"Continue →";
+  if(el){el.style.opacity="0";setTimeout(()=>{el.innerHTML=slidesHTML[idx];el.style.transition="opacity 0.4s";el.style.opacity="1";},120);}
+  stopSpeech(); if(speechEnabled) setTimeout(()=>speakSlide(idx),350);
+}
+function speakSlide(idx) {
+  if(!window.speechSynthesis) return;
+  const {slidesText}=buildSlides();
+  const utter=new SpeechSynthesisUtterance(slidesText[idx]); currentUtter=utter;
+  function pickVoice(){const v=window.speechSynthesis.getVoices();return v.find(v=>/samantha|victoria|karen|zira|google us english/i.test(v.name))||v.find(v=>/female|woman/i.test(v.name)&&/en/i.test(v.lang))||v.find(v=>/en/i.test(v.lang))||v[0]||null;}
+  const voice=pickVoice(); if(voice)utter.voice=voice;
+  utter.lang="en-US";utter.rate=0.92;utter.pitch=1.1;utter.volume=1;
+  utter.onstart=()=>{isSpeaking=true;setAstroTalking(true);updateVoiceBtn();};
+  utter.onend=()=>{isSpeaking=false;setAstroTalking(false);updateVoiceBtn();};
+  utter.onerror=(e)=>{if(e.error==="interrupted"||e.error==="canceled")return;isSpeaking=false;setAstroTalking(false);updateVoiceBtn();};
+  window.speechSynthesis.speak(utter);
+}
+function stopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel();isSpeaking=false;setAstroTalking(false);updateVoiceBtn();}
+function toggleSpeech(){if(isSpeaking){stopSpeech();speechEnabled=false;}else{speechEnabled=true;speakSlide(currentSlide);}updateVoiceBtn();}
+function replayVoice(){stopSpeech();speechEnabled=true;setTimeout(()=>speakSlide(currentSlide),150);}
+function updateVoiceBtn(){const btn=document.getElementById("voice-toggle-btn");if(!btn)return;btn.textContent=isSpeaking?"🔇 Mute":"🔊 Listen";btn.classList.toggle("speaking",isSpeaking);const wave=document.getElementById("sound-wave");if(wave)wave.classList.toggle("active",isSpeaking);}
+function setAstroTalking(on){const a=document.querySelector(".astronaut-svg");if(a)a.classList.toggle("talking",on);}
+if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>{};
+function nextSlide(){const{slidesHTML}=buildSlides();if(currentSlide<slidesHTML.length-1){currentSlide++;renderSlide(currentSlide);}else{stopSpeech();goToPage("page-mission");}}
+function prevSlide(){if(currentSlide>0){currentSlide--;renderSlide(currentSlide);}}
+
+// AUTH MODAL
+let modalMode="login";
+function openModal(mode) {
+  modalMode=mode; hideModalError();
+  ["modal-name","modal-user","modal-pass"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  document.getElementById("modal").classList.add("open");
+  const submitBtn=document.getElementById("modal-submit-btn");
+  if(mode==="signup"){
+    document.getElementById("modal-title").textContent="✨ Create Account";
+    document.getElementById("modal-name-wrap").style.display="block";
+    document.getElementById("modal-switch").innerHTML="Already have an account? <a onclick=\"switchModal('login')\">Log In</a>";
+    submitBtn.textContent="Join the Mission! 🚀"; submitBtn.onclick=handleSignup;
+  }else{
+    document.getElementById("modal-title").textContent="👾 Log In";
+    document.getElementById("modal-name-wrap").style.display="none";
+    document.getElementById("modal-switch").innerHTML="Don't have an account? <a onclick=\"switchModal('signup')\">Sign Up</a>";
+    submitBtn.textContent="Let's Go! 🚀"; submitBtn.onclick=handleLogin;
+  }
+  setTimeout(()=>{const f=document.getElementById(mode==="signup"?"modal-name":"modal-user");if(f)f.focus();},100);
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");hideModalError();}
+function closeModalOutside(e){if(e.target===document.getElementById("modal"))closeModal();}
+function switchModal(mode){openModal(mode);}
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Escape"){closeModal();closeAuthGate();}
+  if(e.key==="Enter"&&document.getElementById("modal").classList.contains("open")){if(modalMode==="signup")handleSignup();else handleLogin();}
+});
+
+// ASTRONAUT PICKER + DASHBOARD
+let selectedAstronaut=null;
+function selectAstronaut(gender){
+  selectedAstronaut=gender;
+  document.getElementById("pick-female").classList.remove("selected-female");
+  document.getElementById("pick-male").classList.remove("selected-male");
+  if(gender==="female")document.getElementById("pick-female").classList.add("selected-female");
+  else document.getElementById("pick-male").classList.add("selected-male");
+  const btn=document.getElementById("sls-proceed-btn");
+  if(btn){
+    btn.removeAttribute("disabled");
+    // scroll into view so the button is visible
+    setTimeout(()=>btn.scrollIntoView({behavior:"smooth",block:"nearest"}),100);
+  }
+}
+function goToDashboard(){if(!selectedAstronaut)return;buildDashboard();goToPage("page-dashboard");}
+function buildDashboard(){
+  const miniWrap=document.getElementById("dash-astronaut-mini");
+  if(miniWrap){
+    const visorColor=selectedAstronaut==="female"?"#FF6B9D":"#4ECDC4";
+    const gloveColor=selectedAstronaut==="female"?"#FF6B9D":"#FF6B35";
+    const badgeColor=selectedAstronaut==="female"?"#FF6B9D":"#FF6B35";
+    const lashes=selectedAstronaut==="female"?`<path d="M75 83 Q78 79 82 82" stroke="#1a2e5e" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M96 82 Q100 78 104 82" stroke="#1a2e5e" stroke-width="1.5" stroke-linecap="round" fill="none"/>` :"";
+    miniWrap.innerHTML=`<svg viewBox="0 0 180 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="52" y="120" width="76" height="90" rx="22" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+      <circle cx="90" cy="90" r="52" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+      <ellipse cx="90" cy="90" rx="36" ry="38" fill="${visorColor}" opacity="0.75"/>
+      <ellipse cx="82" cy="82" rx="10" ry="14" fill="rgba(255,255,255,0.25)"/>
+      <circle cx="80" cy="88" r="5" fill="#1a2e5e"/><circle cx="100" cy="88" r="5" fill="#1a2e5e"/>
+      ${lashes}
+      <path d="M77 100 Q90 112 104 100" stroke="#1a2e5e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <rect x="20" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+      <rect x="126" y="128" width="34" height="56" rx="17" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="2.5"/>
+      <ellipse cx="37" cy="187" rx="16" ry="11" fill="${gloveColor}"/>
+      <ellipse cx="143" cy="187" rx="16" ry="11" fill="${gloveColor}"/>
+      <rect x="60" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+      <rect x="92" y="200" width="28" height="36" rx="14" fill="#C4D0E8" stroke="#a0aec8" stroke-width="2"/>
+      <ellipse cx="74" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+      <ellipse cx="106" cy="236" rx="18" ry="10" fill="#1a2e5e"/>
+      <rect x="112" y="130" width="26" height="40" rx="8" fill="#a0aec8" stroke="#8090b8" stroke-width="2"/>
+      <circle cx="78" cy="150" r="10" fill="${badgeColor}" opacity="0.85"/>
+      <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text></svg>`;
+  }
+  const xpEl=document.getElementById("dash-xp"),xpFill=document.getElementById("dash-xp-fill");
+  const xpTotal=120,xpMax=500;
+  if(xpEl&&xpFill){
+    let count=0;
+    const interval=setInterval(()=>{count+=4;if(count>=xpTotal){count=xpTotal;clearInterval(interval);}xpEl.textContent=count;},20);
+    setTimeout(()=>{xpFill.style.width=((xpTotal/xpMax)*100).toFixed(1)+"%";},300);
+  }
+}
+
+// INIT
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("letsgo-main-btn").addEventListener("click",handleLetsGo);
+  const guestBtn=document.getElementById("nav-guest-btn");
+  const loginBtn=document.getElementById("nav-login-btn");
+  const signupBtn=document.getElementById("nav-signup-btn");
+  if(guestBtn)guestBtn.addEventListener("click",continueAsGuest);
+  if(loginBtn)loginBtn.addEventListener("click",()=>openModal("login"));
+  if(signupBtn)signupBtn.addEventListener("click",()=>openModal("signup"));
+  const gate=document.getElementById("auth-gate");
+  if(gate)gate.addEventListener("click",(e)=>{if(e.target===gate)closeAuthGate();});
+  updateNavForUser();
+  initRocketBubble();
+});
+</script>
+</body>
+</html>
