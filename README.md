@@ -2,7 +2,7 @@
 
 An interactive, educational web application built from scratch to showcase NASA's Artemis program and the future of lunar exploration.
 
-![Artemis Project Preview](website.png)
+![Artemis Project Preview](orgwebsite.png)
 
 ##  Live Demo
 You can view the live, working website here: 
