@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stardance – Hack Club</title>
+  <title>Exploring the Moon with Artemis | Lidika Rahman</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
 :root {
@@ -30,7 +30,7 @@ html, body {
 }
 .page {
   position: fixed; inset: 0;
-  display: flex; flex-direction: column;
+  display: none; flex-direction: column;
   opacity: 0; pointer-events: none;
   transition: opacity 0.5s ease, transform 0.5s ease;
   transform: translateY(30px);
@@ -38,10 +38,12 @@ html, body {
   overflow: hidden;
 }
 .page.active {
+  display: flex;
   opacity: 1; pointer-events: all;
   transform: translateY(0);
 }
 .page.exit-up {
+  display: flex;
   opacity: 0; transform: translateY(-40px);
 }
 #page-dashboard { overflow-y: auto; }
@@ -376,228 +378,102 @@ html, body {
 }
 .back-btn:hover { border-color: rgba(255,255,255,0.5); color: white; }
 
+/* AUTH GATE */
 .auth-gate-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 150;
+  position: fixed; inset: 0; z-index: 150;
   background: rgba(5,5,25,0.9);
   backdrop-filter: blur(10px);
-  display: flex;      
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
-
-.auth-gate-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-.auth-gate-box{
+.auth-gate-overlay.open { opacity: 1; pointer-events: all; }
+.auth-gate-box {
   background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
-  border-radius: 28px;
-  padding: 40px 36px 32px;
-  width: 420px;
-  max-width: 92vw;
+  border-radius: 28px; padding: 40px 36px 32px;
+  width: 420px; max-width: 92vw;
   border: 2px solid rgba(78,205,196,0.3);
   box-shadow: 0 20px 80px rgba(0,0,0,0.7);
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s;
   text-align: center;
 }
-.auth-gate-overlay.open .auth-gate-box{
-  transform: scale(1) translateY(0);
-}
-.auth-gate-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
-}
-.auth-gate-title {
-  font-family: "Fredoka One", cursive;
-  font-size: 1.9rem;
-  color:  var(--star-yellow);
-  margin-bottom: 8px;
-}
-.auth-gate-sub {
-  color: #a0b4d8;
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
-.auth-gate-btns {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.auth-gate-overlay.open .auth-gate-box { transform: scale(1) translateY(0); }
+.auth-gate-icon { font-size: 3rem; margin-bottom: 12px; }
+.auth-gate-title { font-family: "Fredoka One", cursive; font-size: 1.9rem; color: var(--star-yellow); margin-bottom: 8px; }
+.auth-gate-sub { color: #a0b4d8; font-size: 0.95rem; font-weight: 600; margin-bottom: 28px; line-height: 1.5; }
+.auth-gate-btns { display: flex; flex-direction: column; gap: 10px; }
 .auth-gate-btn-primary {
-  font-family:  "Fredoka One", cursive;
-  font-size: 1.1rem;
-  background: var(--planet-teal);
-  color: var(--space-dark);
-  border: none;
-  cursor: pointer;
-  padding: 13px;
-  border-radius: 14px;
-  box-shadow: 0 4px 0 #1a8a85;
-  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: "Fredoka One", cursive; font-size: 1.1rem;
+  background: var(--planet-teal); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 13px; border-radius: 14px;
+  box-shadow: 0 4px 0 #1a8a85; transition: transform 0.15s, box-shadow 0.15s;
 }
-.auth-gate-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 #1a8a85;
-}
+.auth-gate-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #1a8a85; }
 .auth-gate-btn-secondary {
-  font-family: "Fredoka One", cursive;
-  font-size: 1rem;
-  background: var(--star-yellow);
-  color: var(--space-dark);
-  border: none;
-  padding: 12px;
-  border-radius: 14px;
-  box-shadow: 0 4px 0 #c9a500;
-  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: "Fredoka One", cursive; font-size: 1rem;
+  background: var(--star-yellow); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 12px; border-radius: 14px;
+  box-shadow: 0 4px 0 #c9a500; transition: transform 0.15s, box-shadow 0.15s;
 }
-.auth-gate-btn-secondary:hover{
-  transform: translate(-2px);
-  box-shadow: 0 6px 0 #1a8a85;
-}
+.auth-gate-btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #c9a500; }
 .auth-gate-btn-ghost {
-  font-family: "Fredoka One", cursive;
-  font-size: 0.9rem;
-  background: transparent;
-  color: rgba(255,255,255,0.45);
-  border: 1px solid rgba(255,255,255,0.15);
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 14px;
-  transition: all 0.15s;
+  font-family: "Fredoka One", cursive; font-size: 0.9rem;
+  background: transparent; color: rgba(255,255,255,0.45);
+  border: 1.5px solid rgba(255,255,255,0.15); cursor: pointer;
+  padding: 10px; border-radius: 14px; transition: all 0.15s;
 }
-.auth-gate-btn-ghost:hover{
-  border-color: rgba(255,255,255,0.4);
-  color: rgba(255,255,255,0.8);
+.auth-gate-btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.8); }
+
+/* AUTH MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(5,5,25,0.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
-.modal-overlay{
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(5,5,25,0.85);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-.modal-box{
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
   background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
-  border-radius: 24px;
-  padding: 36px 36px 28px;
-  width: 400px;
-  max-width: 92vw;
+  border-radius: 24px; padding: 36px 36px 28px;
+  width: 400px; max-width: 92vw;
   border: 2px solid rgba(78,205,196,0.3);
   box-shadow: 0 20px 80px rgba(0,0,0,0.7);
-  transform: scale(0.9) translateY(20px);
-  transition: transform 0.3s;
-  position: relative;
+  transform: scale(0.9) translateY(20px); transition: transform 0.3s; position: relative;
 }
-.modal-overlay.open .modal-box {
-  transform: scale(1) translateY(0);
+.modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+.modal-title { font-family: "Fredoka One", cursive; font-size: 1.8rem; color: var(--star-yellow); margin-bottom: 18px; }
+.modal-input {
+  width: 100%; padding: 12px 16px; border-radius: 12px;
+  border: 2px solid rgba(78,205,196,0.3); background: rgba(255,255,255,0.07);
+  color: white; font-family: "Nunito", sans-serif; font-size: 1rem;
+  font-weight: 600; margin-bottom: 12px; outline: none; transition: border-color 0.2s;
 }
-.modal-title{
-  font-family: "Fredoka One", cursive;
-  font-size: 1.8rem;
-  color: var(--star-yellow);
-  margin-bottom: 18px;
+.modal-input::placeholder { color: rgba(255,255,255,0.35); }
+.modal-input:focus { border-color: var(--planet-teal); }
+.modal-submit {
+  width: 100%; padding: 13px; font-family: "Fredoka One", cursive;
+  font-size: 1.1rem; background: var(--planet-teal); color: var(--space-dark);
+  border: none; border-radius: 12px; cursor: pointer;
+  box-shadow: 0 4px 0 #1a8a85; transition: transform 0.15s, box-shadow 0.15s; margin-top: 4px;
 }
-.modal-input{
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid rgba(78,205,196,0.3);
-  background: rgba(255,255,255,0.07);
-  color: white;
-  font-family: "Nunito", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.modal-input::placeholder{
-  color: rgba(255,255,255,0.35);
-}
-.modal-input:focus{
-  border-color: var(--planet-teal);
-}
-.modal-submit{
-  width: 100%;
-  padding: 13px;
-  font-family: "Fredoka One", cursive;
-  font-family: 1.1rem;
-  background: var(--planet-teal);
-  color: var(--space-dark);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #1a8a85;
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-top: 4px;
-}
-.modal-submit:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 #1a8a85;
-}
-.modal-close{
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.modal-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #1a8a85; }
+.modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: rgba(255,255,255,0.1); border: none; color: white;
+  font-size: 1.1rem; cursor: pointer; width: 32px; height: 32px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
 }
-.modal-close:hover{
-  background: rgba(255,255,255,0.2);
-}
-.modal-switch{
-  text-align: center;
-  margin-top: 14px;
-  color: rgba(255,255,255,0.5);
-  font-size: 0.88rem;
-}
-.modal-switch a{
-  color: rgba(255,255,255,0.55);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.modal-guest-link a:hover{
-  color: rgba(255,255,255,0.85);
-}
-.modal-error{
-  background: rgba(255,107,157,0.15);
-  border: 1.5px solid rgba(255,107,157,0.5);
-  color:  #ff9ec4;
-  font-size: 0.88rem;
-  font-weight: 700;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  display: none;
+.modal-close:hover { background: rgba(255,255,255,0.2); }
+.modal-switch { text-align: center; margin-top: 14px; color: rgba(255,255,255,0.5); font-size: 0.88rem; }
+.modal-switch a { color: var(--planet-teal); cursor: pointer; font-weight: 700; }
+.modal-guest-link { text-align: center; margin-top: 10px; color: rgba(255,255,255,0.3); font-size: 0.82rem; }
+.modal-guest-link a { color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.modal-guest-link a:hover { color: rgba(255,255,255,0.85); }
+.modal-error {
+  background: rgba(255,107,157,0.15); border: 1.5px solid rgba(255,107,157,0.5);
+  color: #ff9ec4; font-size: 0.88rem; font-weight: 700;
+  border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; display: none;
 }
 
 /* TOAST */
@@ -643,129 +519,55 @@ html, body {
 .sls-intro-title span { color: var(--star-yellow); }
 .sls-intro-sub { font-size: 1rem; color: #a0b4d8; font-weight: 600; margin: 4px 0 20px; }
 
-.astronaut-picker{
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-.picker-card{
-  position: relative;
-  cursor: pointer;
+/* PICKER */
+.astronaut-picker { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.picker-card {
+  position: relative; cursor: pointer;
   background: rgba(255,255,255,0.04);
   border: 2.5px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 22px 28px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),border-color 0.22s, box-shadow 0.22s;
-  min-width: 170px;
-  overflow: hidden;
+  border-radius: 24px; padding: 22px 28px 18px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), border-color 0.22s, box-shadow 0.22s;
+  min-width: 170px; overflow: hidden;
 }
-.picker-card:hover{
-  transform: translate(-6px) scale(1.03);
-  border-color: rgba(255,255,255,0.25);
-}
-.picker-card.selected-female{
-  border-color: var(--planet-pink);
-  box-shadow: 0 0 0 3px rgba(255,107,157,0.2), 0 16px 48px rgba(255,107,157,0.25);
-}
-.picker-card.selected-male{
-  border-color: var(--planet-teal);
-  box-shadow:0 0 0 3px rgba(78,205,196,0.2), 0 16px 48px rgba(78,205,196,0.25);
-}
-.picker-glow{
-  position: absolute;
-  inset: 0;
-  border-radius: 22px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.female-glow{
-  background: radial-gradient(ellipse at 50% 20%, rgba(255,107,157,0.18), transparent 70%);
-}
-.male-glow{
-  background: radial-gradient(ellipse at 50% 20%, rgba(78,205,196,0.18), transparent 70%);
-}
-.picker-card.selected-female .female-glow, .picker-card.selected-male .male-glow{
-  opacity: 1;
-}
-.picker-svg{
-  width: 110px;
-  animation: astroFloat 3.5s ease-in-out infinite;
-}
-#pick-male .picker-svg {
-  animation-delay: -1.5s;
-}
-.picker-label {
-  font-family: "Fredoka One", cursive;
-  font-size: 0.95rem;
-  color: var(--star-yellow);
-}
-.picker-sub{
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.4);
-  font-weight: 700;
-}
-.picker-check{
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--planet-teal);
-  color: var(--space-dark);
-  font-size: 0.85rem;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(0.4);
+.picker-card:hover { transform: translateY(-6px) scale(1.03); border-color: rgba(255,255,255,0.25); }
+.picker-card.selected-female { border-color: var(--planet-pink); box-shadow: 0 0 0 3px rgba(255,107,157,0.2), 0 16px 48px rgba(255,107,157,0.25); }
+.picker-card.selected-male { border-color: var(--planet-teal); box-shadow: 0 0 0 3px rgba(78,205,196,0.2), 0 16px 48px rgba(78,205,196,0.25); }
+.picker-glow { position: absolute; inset: 0; border-radius: 22px; opacity: 0; transition: opacity 0.3s; }
+.female-glow { background: radial-gradient(ellipse at 50% 20%, rgba(255,107,157,0.18), transparent 70%); }
+.male-glow { background: radial-gradient(ellipse at 50% 20%, rgba(78,205,196,0.18), transparent 70%); }
+.picker-card.selected-female .female-glow, .picker-card.selected-male .male-glow { opacity: 1; }
+.picker-svg { width: 110px; animation: astroFloat 3.5s ease-in-out infinite; }
+#pick-male .picker-svg { animation-delay: -1.5s; }
+.picker-label { font-family: "Fredoka One", cursive; font-size: 0.95rem; color: var(--white); margin-top: 6px; }
+.picker-label span { color: var(--star-yellow); }
+.picker-sub { font-size: 0.78rem; color: rgba(255,255,255,0.4); font-weight: 700; }
+.picker-check {
+  position: absolute; top: 12px; right: 14px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--planet-teal); color: var(--space-dark);
+  font-size: 0.85rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.4);
   transition: opacity 0.25s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
-#pick-female.selected-female .picker-check{
-  opacity: 1;
-  transform: scale(1);
-  background: var(--planet-pink);
-}
-#pick-male.selected-male .picker-check{
-  opacity: 1;
-  transform: scale(1);
-  background: var(--planet-teal);
-}
-.sls-proceed-btn{
-  font-family: "Fredoka One", cursive;
-  font-size: 1.15rem;
+#pick-female.selected-female .picker-check { opacity: 1; transform: scale(1); background: var(--planet-pink); }
+#pick-male.selected-male .picker-check { opacity: 1; transform: scale(1); background: var(--planet-teal); }
+.sls-proceed-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.15rem;
   background: linear-gradient(135deg, var(--planet-teal), var(--nebula-purple));
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 14px 44px;
-  border-radius: 60px;
+  color: white; border: none; cursor: pointer;
+  padding: 14px 44px; border-radius: 60px;
   box-shadow: 0 6px 0 #1a3080, 0 12px 40px rgba(78,205,196,0.3);
   transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
-  opacity: 0.4;
-  pointer-events: none;
-  position: relative;
-  z-index: 2;
+  opacity: 0.4; pointer-events: none;
+  /* ensure it's always visible above the back button */
+  position: relative; z-index: 2;
 }
-.sls-proceed-btn:not([disabled]) {
-  opacity: 1;
-  pointer-events: all;
-}
-.sls-proceed-btn:not([disabled]):hover{
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 0 8px 0 #1a3080, 0 20px 50px rgba(78,205,196,0.4);
-}
-.sls-proceed-btn:not([disabled]):active {
-  transform: scale(1.02) translateY(2px);
-  box-shadow: 0 4px 0 #1a3080;
-}
+.sls-proceed-btn:not([disabled]) { opacity: 1; pointer-events: all; }
+.sls-proceed-btn:not([disabled]):hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 8px 0 #1a3080, 0 20px 50px rgba(78,205,196,0.4); }
+.sls-proceed-btn:not([disabled]):active { transform: scale(1.02) translateY(2px); box-shadow: 0 4px 0 #1a3080; }
+
 /* PAGE 5 */
 #page-dashboard { background: radial-gradient(ellipse at 20% 20%, #0e1a4e 0%, #060618 75%); }
 .dashboard-header {
@@ -794,128 +596,36 @@ html, body {
   transition: border-color 0.2s, transform 0.2s;
   display: flex; flex-direction: column; gap: 8px;
 }
-.dash-card:hover{
-  border-color: rgba(78,205,196,0.2);
-  transform: translateY(-2px);
-}
-.dash-card-icon{
-  font-size: 1.4rem;
-}
-.dash-card-label{
-  font-family: "Fredoka One", cursive;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.rank-card{
-  grid-column: 1/-1;
-  flex-direction: row;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-.rank-card .dash-card-icon{
-  font-size: 2rem;
-}
-.rank-card > div:first-child{
-  flex-shrink: 0;
-}
-.dash-rank-badge{
-  font-family: "Fredoka One", cursive;
-  font-size: 1.6rem;
-  color: var(--star-yellow);
-  text-shadow: 2px 2px 0 rgba(255,217,61,0.3);
-  flex-shrink: 0;
-}
-.dash-xp-bar-wrap{
-  flex: 1;
-  min-width: 140px;
-}
-.dash-xp-label {
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.45);
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-.dash-xp-label span{
-  color: var(--planet-teal);
-  font-size: 0.9rem;
-}
-.dash-xp-track{
-  height: 8px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.dash-xp-fill{
-  height: 100%;
-  border-radius: 8px;
-  background: linear-gradient(90deg, var(--planet-teal), var(--nebula-purple));
-  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
-}
-.missions-list{
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.mission-item{
-  font-size: 0.82rem;
-  font-weight: 700;
-  padding: 5px 8px;
-  border-radius: 8px;
-}
-.mission-item.done {
-  color: #a8f4f0;
-  background: rgba(78,205,196,0.08);
-}
-.mission-item-locked{
-  color: rgba(255,255,255,0.25);
-}
-.tag-list{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-.tag{
-  font-size: 0.78rem;
-  font-weight: 800;
-  padding: 4px 11px;
-  border-radius: 50px;
-}
-.strength-tag{
-  background: rgba(78,205,196,0.15);
-  color: var(--planet-teal);
-  border: 1px solid rgba(78,205,196,0.3);
-}
-.training-card{
-  grid-column: 1/-1;
-}
-.training-list{
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 2px;
-}
-.training-item{
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.training-dot{
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-  background:  var(--planet-teal);
-  box-shadow: 0 0 8px rgba(78,205,196,0.6);
-}
-.training-dot.dim{
-  background: rgba(255,255,255,0.15);
-  box-shadow: none;
-}
-/*start from here, In Shaa Allah*/
+.dash-card:hover { border-color: rgba(78,205,196,0.2); transform: translateY(-2px); }
+.dash-card-icon { font-size: 1.4rem; }
+.dash-card-label { font-family: "Fredoka One", cursive; font-size: 0.8rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+.rank-card { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 18px; flex-wrap: wrap; }
+.rank-card .dash-card-icon { font-size: 2rem; }
+.rank-card > div:first-child { flex-shrink: 0; }
+.dash-rank-badge { font-family: "Fredoka One", cursive; font-size: 1.6rem; color: var(--star-yellow); text-shadow: 2px 2px 0 rgba(255,217,61,0.3); flex-shrink: 0; }
+.dash-xp-bar-wrap { flex: 1; min-width: 140px; }
+.dash-xp-label { font-size: 0.78rem; color: rgba(255,255,255,0.45); font-weight: 700; margin-bottom: 5px; }
+.dash-xp-label span { color: var(--planet-teal); font-size: 0.9rem; }
+.dash-xp-track { height: 8px; background: rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; }
+.dash-xp-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--planet-teal), var(--nebula-purple)); transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+.missions-list { display: flex; flex-direction: column; gap: 6px; }
+.mission-item { font-size: 0.82rem; font-weight: 700; padding: 5px 8px; border-radius: 8px; }
+.mission-item.done { color: #a8f4f0; background: rgba(78,205,196,0.08); }
+.mission-item.locked { color: rgba(255,255,255,0.25); }
+.tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.tag { font-size: 0.78rem; font-weight: 800; padding: 4px 11px; border-radius: 50px; }
+.strength-tag { background: rgba(78,205,196,0.15); color: var(--planet-teal); border: 1px solid rgba(78,205,196,0.3); }
+.weak-tag { background: rgba(255,107,53,0.12); color: #ff9e70; border: 1px solid rgba(255,107,53,0.25); }
+.training-card { grid-column: 1 / -1; }
+.training-list { display: flex; flex-direction: column; gap: 12px; margin-top: 2px; }
+.training-item { display: flex; align-items: flex-start; gap: 12px; }
+.training-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; background: var(--planet-teal); box-shadow: 0 0 8px rgba(78,205,196,0.6); }
+.training-dot.dim { background: rgba(255,255,255,0.15); box-shadow: none; }
+.training-name { font-family: "Fredoka One", cursive; font-size: 0.92rem; color: var(--white); }
+.training-desc { font-size: 0.78rem; color: rgba(255,255,255,0.4); font-weight: 600; margin-top: 1px; }
+.training-badge { margin-left: auto; flex-shrink: 0; font-family: "Fredoka One", cursive; font-size: 0.72rem; padding: 3px 11px; border-radius: 50px; }
+.training-badge.next { background: var(--star-yellow); color: var(--space-dark); }
+.dash-footer { display: flex; justify-content: center; padding: 10px 28px 30px; flex-shrink: 0; z-index: 5; position: relative; }
 .dash-proceed-btn {
   font-family: "Fredoka One", cursive; font-size: 1.15rem;
   background: linear-gradient(135deg, var(--rocket-orange), var(--planet-pink));
@@ -926,6 +636,373 @@ html, body {
 }
 .dash-proceed-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 8px 0 #a02060, 0 20px 50px rgba(255,107,53,0.5); }
 .dash-proceed-btn:active { transform: scale(1.02) translateY(2px); box-shadow: 0 4px 0 #a02060; }
+/* ═══════════════════════════════════════════
+   PAGE 6 – SLS ENGINEERING BUILD MODULE
+═══════════════════════════════════════════ */
+#page-sls-build {
+  background: radial-gradient(ellipse at 30% 10%, #102255 0%, #060618 70%);
+  overflow-y: auto; overflow-x: hidden;
+}
+
+/* HUD */
+.build-hud {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 28px; flex-shrink: 0; z-index: 20;
+  position: relative; flex-wrap: wrap;
+}
+.build-hud-stage {
+  font-family: "Fredoka One", cursive; font-size: 0.85rem;
+  color: var(--planet-teal); background: rgba(78,205,196,0.12);
+  border: 1.5px solid rgba(78,205,196,0.35); border-radius: 50px;
+  padding: 5px 14px; white-space: nowrap;
+}
+.build-hud-track {
+  flex: 1; min-width: 120px; height: 8px; border-radius: 8px;
+  background: rgba(255,255,255,0.08); overflow: hidden;
+}
+.build-hud-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--planet-teal), var(--nebula-purple), var(--star-yellow));
+  transition: width 0.5s cubic-bezier(0.22,1,0.36,1); width: 8.33%;
+}
+.build-hud-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.build-badge-chip {
+  font-size: 0.95rem; width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,217,61,0.1); border: 1.5px solid rgba(255,217,61,0.25);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.25; transform: scale(0.85); transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.build-badge-chip.earned { opacity: 1; transform: scale(1); background: rgba(255,217,61,0.18); border-color: var(--star-yellow); box-shadow: 0 0 12px rgba(255,217,61,0.35); }
+.build-hud-exit {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  background: transparent; border: 1.5px solid rgba(255,107,157,0.4);
+  color: var(--planet-pink); padding: 6px 14px; border-radius: 50px;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.build-hud-exit:hover { background: rgba(255,107,157,0.12); border-color: var(--planet-pink); }
+
+/* STAGE WRAPPER */
+.build-stage-wrap {
+  flex: 1; padding: 6px 28px 50px;
+  display: flex; flex-direction: column;
+  position: relative; z-index: 5;
+}
+.sls-stage {
+  display: none;
+  flex-direction: column; gap: 18px;
+  animation: stageIn 0.5s ease;
+  max-width: 980px; width: 100%; margin: 0 auto;
+}
+.sls-stage.active { display: flex; }
+@keyframes stageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.stage-eyebrow {
+  font-family: "Fredoka One", cursive; font-size: 0.78rem;
+  color: var(--star-yellow); letter-spacing: 2px; text-transform: uppercase;
+}
+.stage-title {
+  font-family: "Fredoka One", cursive; font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  color: var(--white); line-height: 1.15;
+}
+.stage-title span { color: var(--planet-teal); }
+.stage-sub { font-size: 0.98rem; color: #a0b4d8; font-weight: 600; line-height: 1.55; max-width: 680px; }
+
+.stage-body {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 26px;
+  align-items: center;
+}
+.stage-body.stack { grid-template-columns: 1fr; }
+.stage-visual {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 260px; position: relative;
+}
+.stage-panel {
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.09);
+  border-radius: 20px; padding: 20px 22px;
+}
+.fact-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.82rem; font-weight: 700; color: var(--planet-teal);
+  background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.25);
+  border-radius: 50px; padding: 5px 12px; margin: 3px 4px 3px 0;
+}
+.fact-chip.orange { color: #ff9e70; background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.25); }
+.fact-chip.purple { color: #c9a0ff; background: rgba(168,85,247,0.12); border-color: rgba(168,85,247,0.3); }
+
+.stage-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.stage-next-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.02rem;
+  background: var(--planet-teal); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 12px 30px; border-radius: 50px;
+  box-shadow: 0 5px 0 #1a8a85, 0 8px 24px rgba(78,205,196,0.3);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.stage-next-btn:hover:not([disabled]) { transform: scale(1.04) translateY(-2px); box-shadow: 0 7px 0 #1a8a85, 0 12px 30px rgba(78,205,196,0.4); }
+.stage-next-btn:active:not([disabled]) { transform: scale(1.01) translateY(2px); box-shadow: 0 3px 0 #1a8a85; }
+.stage-next-btn[disabled] { opacity: 0.35; cursor: not-allowed; box-shadow: 0 5px 0 #1a8a85; }
+.stage-prev-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.92rem;
+  background: transparent; border: 2px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.55); cursor: pointer;
+  padding: 11px 22px; border-radius: 50px; transition: all 0.2s;
+}
+.stage-prev-btn:hover { border-color: rgba(255,255,255,0.4); color: white; }
+.stage-feedback {
+  font-size: 0.88rem; font-weight: 700; padding: 8px 14px; border-radius: 12px;
+  display: none; align-items: center; gap: 8px;
+}
+.stage-feedback.show { display: inline-flex; animation: fadeIn 0.3s ease; }
+.stage-feedback.good { background: rgba(78,205,196,0.12); color: var(--planet-teal); border: 1.5px solid rgba(78,205,196,0.3); }
+.stage-feedback.bad { background: rgba(255,107,157,0.12); color: var(--planet-pink); border: 1.5px solid rgba(255,107,157,0.3); }
+
+/* BADGE TOAST */
+.badge-toast {
+  position: fixed; top: 90px; right: -340px; z-index: 250;
+  background: linear-gradient(135deg, #0d1b4b, #1a0a4e);
+  border: 2px solid var(--star-yellow); border-radius: 18px;
+  padding: 14px 18px; width: 300px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  display: flex; align-items: center; gap: 12px;
+  transition: right 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.badge-toast.show { right: 20px; }
+.badge-toast-icon { font-size: 2rem; flex-shrink: 0; }
+.badge-toast-title { font-family: "Fredoka One", cursive; font-size: 0.78rem; color: var(--star-yellow); letter-spacing: 0.5px; }
+.badge-toast-name { font-family: "Fredoka One", cursive; font-size: 0.95rem; color: white; margin-top: 2px; }
+
+/* ── ROCKET / LAUNCHPAD SVG SCENE (stage 1) ── */
+.launchpad-scene { width: 100%; max-width: 360px; }
+
+/* ── EARTH MOON (stage 2) ── */
+.em-orbit-wrap { position: relative; width: 100%; max-width: 380px; aspect-ratio: 1.4; }
+.payload-tray { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.payload-chip {
+  font-family: "Fredoka One", cursive; font-size: 0.82rem;
+  background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,255,255,0.25);
+  color: #cdd8f5; padding: 8px 16px; border-radius: 14px; cursor: grab;
+  user-select: none; transition: all 0.2s;
+}
+.payload-chip:hover { border-color: var(--planet-teal); color: white; }
+.payload-chip.placed { opacity: 0.3; cursor: not-allowed; }
+.rocket-drop-zone {
+  width: 130px; height: 220px; border-radius: 18px;
+  border: 2.5px dashed rgba(255,255,255,0.2); background: rgba(255,255,255,0.03);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  position: relative; transition: border-color 0.2s, background 0.2s; padding-bottom: 10px;
+}
+.rocket-drop-zone.drag-over { border-color: var(--planet-teal); background: rgba(78,205,196,0.08); }
+.rocket-drop-zone.full { border-color: var(--rocket-orange); }
+.rocket-drop-zone.exploded { border-color: var(--planet-pink); background: rgba(255,107,157,0.08); animation: shakeFail 0.4s; }
+.rdz-label { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); font-family: "Fredoka One", cursive; font-size: 0.78rem; color: rgba(255,255,255,0.45); white-space: nowrap; }
+.rdz-fill { display: flex; flex-direction: column-reverse; gap: 4px; width: 100%; align-items: center; padding: 0 8px; }
+.rdz-item { font-size: 1.4rem; background: rgba(255,217,61,0.15); border-radius: 8px; width: 90%; text-align: center; padding: 4px 0; cursor: grab; transition: transform 0.15s; }
+.rdz-item:hover { transform: scale(1.08); background: rgba(255,217,61,0.28); }
+@keyframes shakeFail { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ── CORE STAGE BUILDER (stage 3) ── */
+.core-stage-rocket { display: flex; flex-direction: column; align-items: center; gap: 0; width: 150px; }
+.core-slot {
+  width: 140px; height: 76px; border: 2.5px dashed rgba(255,255,255,0.22);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-family: "Fredoka One", cursive; font-size: 0.72rem; text-align: center;
+  color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.02);
+  transition: all 0.2s; margin: -1px 0; position: relative; padding: 4px;
+}
+.core-slot.drag-over { border-color: var(--planet-teal); background: rgba(78,205,196,0.1); }
+.core-slot.filled { border-style: solid; color: white; }
+.core-slot[data-slot="lh2"].filled { background: rgba(78,205,196,0.25); border-color: var(--planet-teal); }
+.core-slot[data-slot="lox"].filled { background: rgba(168,85,247,0.25); border-color: var(--nebula-purple); }
+.core-slot[data-slot="avionics"].filled { background: rgba(255,217,61,0.25); border-color: var(--star-yellow); }
+.core-slot[data-slot="engine"].filled { background: rgba(255,107,53,0.25); border-color: var(--rocket-orange); }
+.core-parts-tray { display: flex; gap: 10px; flex-wrap: wrap; }
+.core-part-chip {
+  font-family: "Fredoka One", cursive; font-size: 0.8rem;
+  border: 2px solid; border-radius: 14px; padding: 10px 14px; cursor: grab;
+  user-select: none; transition: all 0.2s; background: rgba(255,255,255,0.04);
+  display: flex; align-items: center; gap: 6px;
+}
+.core-part-chip[data-part="lh2"] { border-color: var(--planet-teal); color: var(--planet-teal); }
+.core-part-chip[data-part="lox"] { border-color: var(--nebula-purple); color: #c9a0ff; }
+.core-part-chip[data-part="avionics"] { border-color: var(--star-yellow); color: var(--star-yellow); }
+.core-part-chip[data-part="engine"] { border-color: var(--rocket-orange); color: #ff9e70; }
+.core-part-chip:hover { transform: translateY(-2px); }
+.core-part-chip.used { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
+
+/* ── ENGINE INSTALL (stage 4) ── */
+.engine-bay { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.engine-slot {
+  width: 78px; height: 100px; border: 2.5px dashed rgba(255,255,255,0.22);
+  border-radius: 12px 12px 6px 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; transition: all 0.2s; background: rgba(255,255,255,0.02); position: relative;
+}
+.engine-slot.drag-over { border-color: var(--rocket-orange); background: rgba(255,107,53,0.1); }
+.engine-slot.filled { border-style: solid; border-color: var(--rocket-orange); background: rgba(255,107,53,0.18); }
+.engine-drag-source {
+  width: 78px; height: 78px; border-radius: 14px; border: 2.5px solid var(--rocket-orange);
+  background: rgba(255,107,53,0.12); display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; cursor: grab; transition: all 0.2s; margin: 0 auto;
+}
+.engine-drag-source.used { opacity: 0.2; cursor: not-allowed; pointer-events: none; }
+.thrust-calc-box {
+  background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px; padding: 14px 18px; margin-top: 6px;
+}
+.thrust-calc-row { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #cdd8f5; font-weight: 700; flex-wrap: wrap; }
+.thrust-input {
+  width: 90px; padding: 8px 10px; border-radius: 10px; border: 2px solid rgba(78,205,196,0.35);
+  background: rgba(255,255,255,0.07); color: white; font-family: "Nunito", sans-serif; font-weight: 800;
+  font-size: 1rem; text-align: center;
+}
+.thrust-input:focus { outline: none; border-color: var(--planet-teal); }
+
+/* ── BOOSTER CHOICE (stage 5) ── */
+.booster-scene { display: flex; align-items: flex-end; justify-content: center; gap: 18px; }
+.booster-choice-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.booster-card {
+  background: rgba(255,255,255,0.04); border: 2.5px solid rgba(255,255,255,0.12);
+  border-radius: 18px; padding: 16px 20px; width: 200px; cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1); text-align: center;
+}
+.booster-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); }
+.booster-card.chosen-right { border-color: var(--planet-teal); box-shadow: 0 0 0 3px rgba(78,205,196,0.2); background: rgba(78,205,196,0.08); }
+.booster-card.chosen-wrong { border-color: var(--planet-pink); box-shadow: 0 0 0 3px rgba(255,107,157,0.2); background: rgba(255,107,157,0.08); }
+.booster-card-title { font-family: "Fredoka One", cursive; font-size: 1.1rem; color: white; margin-bottom: 6px; }
+.booster-card-desc { font-size: 0.82rem; color: #a0b4d8; font-weight: 600; line-height: 1.4; }
+.booster-segments { display: flex; flex-direction: column; gap: 3px; margin: 10px auto; width: 36px; }
+.booster-seg { height: 16px; border-radius: 4px; background: var(--rocket-orange); opacity: 0.8; }
+
+/* ── ORION STACK PUZZLE (stage 6) ── */
+.orion-puzzle { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.orion-stack-zone { display: flex; flex-direction: column-reverse; gap: 6px; width: 200px; min-height: 280px; border: 2px dashed rgba(255,255,255,0.15); border-radius: 14px; padding: 10px; }
+.orion-piece {
+  border-radius: 10px; padding: 10px 12px; cursor: grab; user-select: none;
+  font-family: "Fredoka One", cursive; font-size: 0.8rem; text-align: center;
+  border: 2px solid; transition: all 0.2s;
+}
+.orion-piece[data-piece="las"] { background: rgba(255,107,53,0.15); border-color: var(--rocket-orange); color: #ff9e70; }
+.orion-piece[data-piece="crew"] { background: rgba(78,205,196,0.15); border-color: var(--planet-teal); color: var(--planet-teal); }
+.orion-piece[data-piece="service"] { background: rgba(168,85,247,0.15); border-color: var(--nebula-purple); color: #c9a0ff; }
+.orion-piece[data-piece="adapter"] { background: rgba(255,217,61,0.15); border-color: var(--star-yellow); color: var(--star-yellow); }
+.orion-piece.placed-correct { opacity: 1; }
+.orion-piece.used { opacity: 0.2; pointer-events: none; }
+.orion-pieces-tray { display: flex; flex-direction: column; gap: 8px; width: 200px; }
+.orion-slot-hint { font-size: 0.7rem; color: rgba(255,255,255,0.3); text-align: center; font-weight: 700; }
+
+/* ── ICPS (stage 7) ── */
+.icps-ignite-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.icps-ignite-btn {
+  width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--star-yellow);
+  background: radial-gradient(circle at 35% 30%, rgba(255,217,61,0.3), rgba(255,107,53,0.15));
+  display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
+  cursor: pointer; transition: all 0.25s; margin: 0 auto; position: relative;
+}
+.icps-ignite-btn::before {
+  content: ""; position: absolute; inset: -10px; border-radius: 50%;
+  border: 2px solid rgba(255,217,61,0.4); animation: icpsAffordanceRing 1.8s ease-out infinite;
+}
+.icps-ignite-btn.ignited::before { display: none; }
+.icps-ignite-btn:hover { transform: scale(1.06); box-shadow: 0 0 30px rgba(255,217,61,0.4); }
+.icps-ignite-btn.ignited { animation: ignitePulse 1s ease-in-out infinite; }
+.icps-ignite-label {
+  font-family: "Fredoka One", cursive; font-size: 0.95rem; color: var(--star-yellow);
+  text-align: center; letter-spacing: 1px;
+}
+.icps-ignite-label span { display: block; font-family: "Nunito", sans-serif; font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: normal; margin-top: 4px; }
+@keyframes icpsAffordanceRing { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(1.35); opacity: 0; } }
+@keyframes ignitePulse { 0%,100%{box-shadow:0 0 20px rgba(255,217,61,0.4)} 50%{box-shadow:0 0 50px rgba(255,107,53,0.7)} }
+
+/* ── LAUNCH READINESS (stage 8) ── */
+.checklist { display: flex; flex-direction: column; gap: 10px; }
+.checklist-item {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all 0.2s;
+}
+.checklist-item:hover { border-color: rgba(78,205,196,0.3); }
+.checklist-item.checked { border-color: var(--planet-teal); background: rgba(78,205,196,0.08); }
+.checklist-box {
+  width: 24px; height: 24px; border-radius: 7px; border: 2px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s;
+  font-size: 0.9rem;
+}
+.checklist-item.checked .checklist-box { background: var(--planet-teal); border-color: var(--planet-teal); color: var(--space-dark); }
+.checklist-text { font-weight: 700; color: #cdd8f5; font-size: 0.95rem; }
+
+/* ── LAUNCH SIMULATION (stage 9) ── */
+.launch-sim-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: center; }
+.countdown-display {
+  font-family: "Fredoka One", cursive; font-size: 4rem; color: var(--star-yellow);
+  text-align: center; text-shadow: 0 0 30px rgba(255,217,61,0.5);
+}
+.telemetry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.telemetry-card { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 14px; }
+.telemetry-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.telemetry-value { font-family: "Fredoka One", cursive; font-size: 1.3rem; color: white; margin-top: 2px; }
+.launch-start-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.1rem;
+  background: linear-gradient(135deg, var(--rocket-orange), var(--star-yellow)); color: var(--space-dark);
+  border: none; cursor: pointer; padding: 14px 36px; border-radius: 50px;
+  box-shadow: 0 6px 0 #8a3e00, 0 12px 36px rgba(255,107,53,0.35);
+  transition: transform 0.15s, box-shadow 0.15s; display: block; margin: 0 auto;
+}
+.launch-start-btn:hover:not([disabled]) { transform: scale(1.05) translateY(-2px); }
+.launch-start-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.flame-fx { width: 40px; height: 60px; margin: 8px auto 0; border-radius: 50% 50% 60% 60%; background: radial-gradient(ellipse at 50% 0%, #fff7d6, var(--star-yellow) 40%, var(--rocket-orange) 75%, transparent 100%); opacity: 0; transition: opacity 0.2s; }
+.flame-fx.on { opacity: 1; animation: flameFlicker 0.18s ease-in-out infinite alternate; }
+@keyframes flameFlicker { from { transform: scaleY(1) scaleX(1); } to { transform: scaleY(1.15) scaleX(0.9); } }
+.mini-rocket-sim { width: 70px; transition: transform 1.2s ease-in; }
+.mini-rocket-sim.liftoff { transform: translateY(-160px); }
+
+/* ── STAGE SEPARATION (stage 10) ── */
+.separation-timeline { position: relative; height: 64px; background: rgba(255,255,255,0.04); border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.1); margin: 10px 0; overflow: hidden; }
+.separation-marker { position: absolute; top: 0; bottom: 0; width: 3px; background: rgba(255,217,61,0.5); }
+.separation-progress { position: absolute; top: 0; bottom: 0; left: 0; width: 0%; background: linear-gradient(90deg, var(--planet-teal), var(--nebula-purple)); transition: width 0.1s linear; opacity: 0.35; }
+.separation-action-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.sep-action-btn {
+  font-family: "Fredoka One", cursive; font-size: 0.88rem;
+  background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); color: white;
+  padding: 10px 18px; border-radius: 50px; cursor: pointer; transition: all 0.2s;
+}
+.sep-action-btn:hover:not([disabled]) { border-color: var(--planet-teal); background: rgba(78,205,196,0.1); }
+.sep-action-btn[disabled] { opacity: 0.3; cursor: not-allowed; }
+.sep-action-btn.done { border-color: var(--planet-teal); background: rgba(78,205,196,0.15); opacity: 0.6; }
+
+/* ── TLI (stage 11) ── */
+.tli-orbit-visual { width: 100%; max-width: 340px; }
+.tli-burn-btn {
+  font-family: "Fredoka One", cursive; font-size: 1.05rem;
+  background: linear-gradient(135deg, var(--nebula-purple), var(--planet-pink)); color: white;
+  border: none; cursor: pointer; padding: 13px 32px; border-radius: 50px;
+  box-shadow: 0 6px 0 #5a1080, 0 12px 36px rgba(168,85,247,0.3);
+  transition: transform 0.15s, box-shadow 0.15s; display: block; margin: 14px auto 0;
+}
+.tli-burn-btn:hover:not([disabled]) { transform: scale(1.05) translateY(-2px); }
+.tli-burn-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* ── REPORT CARD (stage 12) ── */
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.report-card-item { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px 18px; }
+.report-card-label { font-size: 0.78rem; color: rgba(255,255,255,0.45); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.report-card-value { font-family: "Fredoka One", cursive; font-size: 1.8rem; color: var(--white); }
+.report-bar-track { height: 8px; border-radius: 8px; background: rgba(255,255,255,0.08); overflow: hidden; margin-top: 8px; }
+.report-bar-fill { height: 100%; border-radius: 8px; transition: width 1.4s cubic-bezier(0.22,1,0.36,1); }
+.report-feedback-panel { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 18px 20px; margin-top: 6px; }
+.report-feedback-title { font-family: "Fredoka One", cursive; font-size: 1rem; color: var(--star-yellow); margin-bottom: 10px; }
+.report-feedback-list { display: flex; flex-direction: column; gap: 8px; }
+.report-feedback-row { font-size: 0.88rem; color: #cdd8f5; font-weight: 600; display: flex; gap: 8px; align-items: flex-start; }
+.report-final-badge { text-align: center; margin-top: 8px; }
+.report-final-badge .badge-icon { font-size: 3.2rem; }
+.report-final-badge .badge-name { font-family: "Fredoka One", cursive; font-size: 1.3rem; color: var(--star-yellow); margin-top: 4px; }
+
+@media (max-width: 720px) {
+  .stage-body, .launch-sim-wrap, .report-grid { grid-template-columns: 1fr; }
+  .build-hud { padding: 12px 16px; }
+  .build-stage-wrap { padding: 6px 16px 50px; }
+  .orion-puzzle { gap: 14px; }
+  .orion-stack-zone, .orion-pieces-tray { width: 100%; max-width: 280px; }
+}
+
 .hackclub-ribbon { position: fixed; bottom: 14px; right: 16px; z-index: 50; font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 700; letter-spacing: 1px; }
 .typing-cursor { display: inline-block; width: 2px; height: 1.1em; background: #1a1a3e; margin-left: 2px; animation: blink 0.8s step-end infinite; vertical-align: middle; }
 
@@ -981,7 +1058,7 @@ html, body {
     <div class="planet p3"></div>
 
     <div class="home-text">
-      <div class="hackclub-badge">🚀 HACK CLUB STARDANCE</div>
+      <div class="hackclub-badge">🚀 An Exciting Lunar Journey!</div>
       <h1 class="home-title">Explore<br />the <span>Moon</span><br />with ARTEMIS!</h1>
       <p class="home-subtitle">Join a cosmic adventure, learn about the Artemis missions, and help engineer the Space Launch System!</p>
       <button class="letsgo-btn" id="letsgo-main-btn">Let's Go &nbsp;🚀</button>
@@ -1166,7 +1243,7 @@ html, body {
           <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text>
           <path d="M50 68 Q58 40 90 38 Q122 40 130 68" stroke="#c93e00" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.5"/>
         </svg>
-        <div class="picker-label">👩‍🚀 Commander <span>Lidika</span></div>
+        <div class="picker-label">👩‍🚀 Commander <span>Humaira</span></div>
         <div class="picker-sub">She / Her</div>
         <div class="picker-check" id="check-female">✓</div>
       </div>
@@ -1194,7 +1271,7 @@ html, body {
           <circle cx="78" cy="150" r="10" fill="#FF6B35" opacity="0.85"/>
           <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text>
         </svg>
-        <div class="picker-label">👨‍🚀 Commander <span>Orion</span></div>
+        <div class="picker-label">👨‍🚀 Commander <span>Ayman</span></div>
         <div class="picker-sub">He / Him</div>
         <div class="picker-check" id="check-male">✓</div>
       </div>
@@ -1279,10 +1356,292 @@ html, body {
   </div>
 
   <div class="dash-footer">
-    <button class="dash-proceed-btn" onclick="showToast('🚀 SLS Engineering Module launching soon! In Shaa Allah!')">🛸 Start SLS Engineering &nbsp;→</button>
+    <button class="dash-proceed-btn" onclick="startSLSBuild()">🛸 Start SLS Engineering &nbsp;→</button>
   </div>
   <button class="back-btn" onclick="goToPage('page-sls-intro')">← Back</button>
 </div>
+
+<!-- ═══════ PAGE 6: SLS ENGINEERING BUILD MODULE ═══════ -->
+<div class="page" id="page-sls-build">
+  <div class="build-hud">
+    <div class="build-hud-stage" id="build-hud-stage">Stage 1 / 12</div>
+    <div class="build-hud-track"><div class="build-hud-fill" id="build-hud-fill"></div></div>
+    <div class="build-hud-badges" id="build-hud-badges">
+      <div class="build-badge-chip" id="badge-chip-1" title="Junior Rocket Engineer">🛰️</div>
+      <div class="build-badge-chip" id="badge-chip-2" title="Mission Architect">🌙</div>
+      <div class="build-badge-chip" id="badge-chip-3" title="Core Stage Builder">🧪</div>
+      <div class="build-badge-chip" id="badge-chip-4" title="Propulsion Specialist">🔥</div>
+      <div class="build-badge-chip" id="badge-chip-5" title="Booster Commander">🚀</div>
+      <div class="build-badge-chip" id="badge-chip-6" title="Orion Architect">🛡️</div>
+      <div class="build-badge-chip" id="badge-chip-7" title="Upper Stage Engineer">⚙️</div>
+      <div class="build-badge-chip" id="badge-chip-8" title="Launch Director">✅</div>
+      <div class="build-badge-chip" id="badge-chip-9" title="Flight Controller">📡</div>
+      <div class="build-badge-chip" id="badge-chip-10" title="Separation Specialist">🪂</div>
+      <div class="build-badge-chip" id="badge-chip-11" title="Navigator">🌌</div>
+      <div class="build-badge-chip" id="badge-chip-12" title="Certified SLS Engineer">🏆</div>
+    </div>
+    <button class="build-hud-exit" onclick="exitSLSBuild()">✕ Exit to Dashboard</button>
+  </div>
+<div class="build-stage-wrap">
+
+  <div class="sls-stage" data-stage="1">
+    <div class="stage-eyebrow">Stage 1/12 · Marshall Space Flight Center</div>
+    <h2 class="stage-title">Welcome to<span>Mission Control</span>🛰️</h2>
+    <p class="stage-sub" id="s1-greeting">NASA needs your help building the rocket that will take Artemis astronauts to the Moon. Are you ready, Engineer?</p>
+    <div class="stage-body">
+      <div class="stage-visual">
+        <svg class="launchpad-scene" viewBox="0 0 320 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="320" width="320" height="40" fill="#0d1b4b"/>
+            <rect x="40" y="300" width="240" height="22" rx="3" fill="#1a2e5e" stroke="#2a3e70" stroke-width="2"/>
+            <rect x="150" y="120" width="20" height="182" fill="#a0aec8"/>
+            <rect x="120" y="100" width="80" height="200" rx="10" fill="#E8EEF8" stroke="#C4D0E8" stroke-width="3"/>
+            <path d="M120 100 C120 60 140 30 160 28 C180 30 200 60 200 100Z" fill="#FF6B35" stroke="#c93e00" stroke-width="2"/>
+            <rect x="100" y="220" width="20" height="60" rx="6" fill="#C4D0E8"/>
+            <rect x="200" y="220" width="20" height="60" rx="6" fill="#C4D0E8"/>
+            <circle cx="160" cy="170" r="16" fill="#4ECDC4" opacity="0.7"/>
+            <rect x="135" y="290" width="50" height="20" rx="4" fill="#FF6B35" opacity="0.8"/>
+            <g class="launch-tower-lights">
+              <circle cx="150" cy="130" r="3" fill="#FFD93D"><animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/></circle>
+              <circle cx="170" cy="150" r="3" fill="#FFD93D"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.2s" repeatCount="indefinite"/></circle>
+              <circle cx="150" cy="190" r="3" fill="#4ECDC4"><animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/></circle>
+            </g>
+          </svg>
+
+      </div>
+
+      <div class="stage-panel">
+        <p style="font-weight:700;color:#cdd8f5;line-height: 1.6;font-size: 0.95rem;">📋<b style="color: var(--star-yellow)">Mission Briefing</b>You've been assigned to the Artemis program as a Junior Rocket Engineer. Your job: design, build, fuel, and launch the Space Launch System (SLS) — the most powerful rocket NASA has ever built.</p>
+        <div style="margin-top: 14px;">
+          <span class="fact-chip">🏢 Marshall Space Flight Center</span>
+          <span class="fact-chip orange">🌙 Destination: The Moon</span>
+          <span class="fact-chip purple">👨‍🚀 Crew: Artemis Astronauts</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-actions">
+      <button class="stage-next-btn" onclick="completeStage(1)">Accept Mission &nbsp;🎖️</button>
+    </div>
+  </div>
+
+  <div class="sls-stage" data-stage="2">
+    <div class="stage-eyebrow">Stage 2/12 · Mission Briefing</div>
+    <h2 class="stage-title">Why Do We Need <span>SLS</span>🌍🌙</h2>
+    <p>Normal rockets are great for satellites — but the Moon is 239,000 miles away, and Artemis needs to carry a crew capsule, a service module, and tons of supplies. Drag payloads into the rocket and discover what happens.</p>
+    <div class="stage-body">
+      <div class="stage-visual">
+         <svg class="em-orbit-wrap" viewBox="0 0 380 270" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="70" cy="140" r="46" fill="#2a6df0" opacity="0.85"/>
+            <circle cx="70" cy="140" r="46" fill="none" stroke="#4ECDC4" stroke-width="1.5" opacity="0.4"/>
+            <text x="70" y="200" text-anchor="middle" fill="#a0b4d8" font-size="12" font-weight="700" font-family="Nunito">EARTH</text>
+            <circle cx="330" cy="80" r="22" fill="#d8d4c8"/>
+            <text x="330" y="118" text-anchor="middle" fill="#a0b4d8" font-size="12" font-weight="700" font-family="Nunito">MOON</text>
+            <path d="M110 130 Q220 40 305 75" stroke="#FFD93D" stroke-width="2" stroke-dasharray="6 6" fill="none" opacity="0.6"/>
+            <circle cx="160" cy="92" r="4" fill="#FFD93D"><animate attributeName="cx" values="116;305" dur="3s" repeatCount="indefinite"/><animate attributeName="cy" values="128;76" dur="3s" repeatCount="indefinite"/></circle>
+          </svg>
+      </div>
+
+      <div class="stage-panel">
+        <div class="payload-tray" id="payload-tray">
+          <div class="payload-chip" draggable="true" data-payload="orion" data-weight="33000">🛰️ Orion Capsule</div>
+          <div class="payload-chip" draggable="true" data-payload="supplies" data-weight="12000">📦 Supplies</div>
+          <div class="payload-chip" draggable="true" data-payload="lander" data-weight="45000">🚀 Lunar Lander Parts</div>
+        </div>
+        <p style="font-size: 0.82rem;color: rgba(255,255,255,0.4);font-weight: 700;margin-top: 8px;">Drag all 3 payloads into the rocket →</p>
+      </div>
+    </div>
+    <div class="stage-body" style="margin-top: -6px;">
+
+      <div class="stage-visual" style="min-height: auto;">
+        <div class="rocket-drop-zone" id="small-rocket-zone">
+          <div class="rdz-label">🪐 Regular Rocket (max 40,000 lbs)</div>
+          <div class="rdz-fill" id="small-rocket-fill"></div>
+        </div>
+      </div>
+
+      <div class="stage-visual" style="min-height: auto;">
+        <div class="rocket-drop-zone" id="small-rocket-zone">
+          <div class="rdz-label">🛸 SLS (max 100,000+ lbs)</div>
+          <div class="rdz-fill" id="small-rocket-fill"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stage-feedback" id="s2-feedback"></div>
+    <div class="stage-actions">
+      <button class="stage-prev-btn" onclick="goToStage(1)">← Back</button>
+      <button class="stage-next-btn" id="s2-next" onclick="completeStage(2)" disabled>Continue &nbsp;→</button>
+    </div>
+  </div>
+
+  <div class="sls-stage" data-stage="3">
+    <div class="stage-eyebrow">Stage 3 / 12 · Core Stage Assembly</div>
+    <h2 class="stage-title">Build the <span>Core Stage</span>🧪</h2>
+    <p class="stage-sub">The Core Stage is the backbone of SLS —<b style="color: var(--star-yellow)">212+ ft tall</b>of propellant. Drag each component into its correct slot, top to bottom.</p>
+    <div class="stage-body">
+      <div class="stage-visual">
+        <div class="core-stage-rocket">
+          <div class="core-slot" data-slot="avionics">Avionics<br/>(Top)</div>
+          <div class="core-slot" data-slot="lox">Liquid Oxygen Tank</div>
+          <div class="core-slot" data-slot="lh2">Liquid Hydrogen Tank</div>
+          <div class="core-slot" data-slot="engine">Engine Section<br/>(Bottom)</div>
+        </div>
+      </div>
+
+      <div class="stage-panel">
+        <div class="core-parts-tray" id="core-parts-tray">
+          <div class="core-part-chip" draggable="true" data-part="avionics">🧠 Avionics</div>
+          <div class="core-part-chip" draggable="true" data-part="lox">🌬️ LOX Tank</div>
+          <div class="core-part-chip" draggable="true" data-part="lh2">💧 LH2 Tank</div>
+          <div class="core-part-chip" draggable="true" data-part="engine">🔧 Engine Section</div>
+        </div>
+        <div style="margin-top: 14px;">
+          <span class="fact-chip">📏 212+ ft tall</span>
+           <span class="fact-chip orange">⛽ 733,000 gallons</span>
+        </div>
+        <div class="stage-feedback" id="s3-feedback"></div>
+      </div>
+  </div>
+  <div class="stage-actions">
+    <button class="stage-prev-btn" onclick="goToStage(2)">← Back</button>
+    <button class="stage-next-btn" id="s3-next" onclick="completeStage(3)" disabled>Continue &nbsp;→</button>
+  </div>
+</div>
+
+<div class="sls-stage" data-stage="4">
+  <div class="stage-eyebrow">Stage 4 / 12 · Propulsion</div>
+  <h2 class="stage-title">Install the <span>RS-25 Engines</span>🔥</h2>
+  <p class="stage-sub">SLS uses <b style="color: var(--star-yellow);">4 RS-25 engines</b>burning liquid hydrogen + liquid oxygen, producing about <b style="color: var(--star-yellow);">2 million lbs</b>of combined thrust. Drag an engine into each slot.</p>
+  <div class="stage-body stack">
+    <div class="stage-visual">
+      <div class="engine-bay" id="engine-bay">
+        <div class="engine-slot" data-engine-slot="1"></div>
+        <div class="engine-slot" data-engine-slot="2"></div>
+        <div class="engine-slot" data-engine-slot="3"></div>
+        <div class="engine-slot" data-engine-slot="4"></div>
+      </div>
+      <div style="display: flex; gap: 14px; justify-content: center; margin-top: 18px; flex-wrap: wrap;" id="engine-source-tray">
+        <div class="engine-drag-source" draggable="true" data-engine="rs25">🔥</div>
+        <div class="engine-drag-source" draggable="true" data-engine="rs25">🔥</div>
+        <div class="engine-drag-source" draggable="true" data-engine="rs25">🔥</div>
+        <div class="engine-drag-source" draggable="true" data-engine="rs25">🔥</div>
+      </div>
+    </div>
+    <div class="thrust-calc-box">
+      <div class="thrust-calc-row">⚙️ Each RS-25 produces approximately <span style="color: var(--star-yellow);">512,000 lbs</span>of thrust</div>
+      <div class="thrust-calc-row" style="margin-top: 10px;">
+        🧮 Total thrust from 4 engines =
+        <input type="number" class="thrust-input" id="thrust-answer" placeholder="?"/>
+        Ibs
+        <button class="stage-prev-btn" style="padding: 8px 16px; font-size: 0.85rem;" onclick="checkThrustCalc()">Check</button>
+      </div>
+      <div class="stage-feedback" id="s4-feedback"></div>
+    </div>
+  </div>
+  <div class="stage-actions">
+    <button class="stage-prev-btn" onclick="goToStage(3)">← Back</button>
+    <button class="stage-next-btn" id="s4-next" onclick="completeStage(4)" disabled>Continue &nbsp;→</button>
+  </div>
+</div>
+
+<div class="sls-stage" data-stage="5">
+  <div class="stage-eyebrow">Stage 5 / 12 · Booster Configuration</div>
+  <h2 class="stage-title">Attach the <span>Solid Rocket Boosters</span>🚀</h2>
+  <p class="stage-sub">Twin boosters flank the Core Stage and provide<b style="color: var(--star-yellow);">over 75%</b>of launch thrust during the critical first two minutes of flight. NASA upgraded from 4-segment Shuttle boosters to a new design for SLS — which one?</p>
+  <div class="booster-choice-cards">
+
+    <div class="booster-card" id="booster-4seg" onclick="chooseBooster('4seg')">
+      <div class="booster-segments">
+        <div class="booster-seg"></div><div class="booster-seg"></div><div class="booster-seg"></div><div class="booster-seg"></div>
+      </div>
+      <div class="booster-card-title">4-Segment Booster</div>
+      <div class="booster-card-desc">The classic Space Shuttle booster design. Reliable, but less powerful.</div>
+    </div>
+
+     <div class="booster-card" id="booster-5seg" onclick="chooseBooster('5seg')">
+      <div class="booster-segments">
+        <div class="booster-seg"></div><div class="booster-seg"></div><div class="booster-seg"></div><div class="booster-seg"></div>
+      </div>
+      <div class="booster-card-title">5-Segment Booster</div>
+      <div class="booster-card-desc">A longer, upgraded booster with extra propellant for SLS's heavier payloads.</div>
+    </div>
+  </div>
+
+  <div class="stage-feedback" id="s5-feedback"></div>
+  <div class="stage-actions">
+    <button class="stage-prev-btn" onclick="goToStage(4)">← Back</button>
+    <button class="stage-next-btn" id="s5-next" onclick="completeStage(5)" disabled>Continue &nbsp;→</button>
+  </div>
+</div>
+
+<div class="sls-stage" data-stage="6">
+  <div class="stage-eyebrow">Stage 6 / 12 · Orion Assembly</div>
+  <h2 class="stage-title">Build the <span>Orion Stack</span>🛡️</h2>
+  <p class="stage-sub">Stack the Orion components from bottom to top:<b style="color: var(--star-yellow);">Service Module → Crew Module → Adapter → Launch Abort System</b>Drag them into the stack zone <b>in that exact order</b> — the first piece you drop becomes the bottom of the stack.</p>
+  <div class="orion-puzzle">
+    <div class="orion-pieces-tray" id="orion-pieces-tray">
+      <div class="orion-slot-hint">Drag pieces from here →</div>
+      <div class="orion-piece" draggable="true" data-piece="las">🚨 Launch Abort System</div>
+      <div class="orion-piece" draggable="true" data-piece="crew">👨‍🚀 Crew Module</div>
+      <div class="orion-piece" draggable="true" data-piece="adapter">🔗 Adapter</div>
+      <div class="orion-piece" draggable="true" data-piece="service">⚡ Service Module</div>
+    </div>
+    <div class="orion-stack-zone" id="orion-stack-zone">
+      <div class="orion-slot-hint" style="width: 100%;">Stack here (bottom → top)</div>
+    </div>
+  </div>
+  <div class="stage-feedback" id="s6-feedbacks"></div>
+  <div class="stage-actions">
+    <button class="stage-prev-btn" onclick="goToStage(5)">← Back</button>
+    <button class="stage-next-btn" id="s6-next" onclick="completeStage(6)" disabled>Continue &nbsp;</button>
+  </div>
+</div>
+
+
+<div class="sls-stage" data-stage="7">
+  <div class="stage-eyebrow">Stage 7 / 12 · Upper Stage</div>
+  <h2 class="stage-title">Add the <span>ICPS</span>Upper Stage ⚙️</h2>
+  <p class="stage-sub">The Interim Cryogenic Propulsion Stage (ICPS) uses a single <b style="color: var(--star-yellow);">RL10 engine</b>to send Orion toward the Moon. It's flown on Artemis I, II, and III. Click the engine to ignite it.</p>
+  <div class="stage-body stack">
+    <div class="stage-visual">
+      <div class="icps-ignite-wrap">
+        <div class="icps-ignite-btn" id="icps-ignite-btn" onclick="igniteICPS()">⚙️</div>
+        <div class="icps-ignite-label" id="icps-ignite-label">RL10 ENGINE<br/>👆 Click to Ignite</div>
+      </div>
+    </div>
+    <div class="stage-panel" style="text-align: center;">
+      <span class="fact-chip">🔧 RL10 Engine</span>
+      <span class="fact-chip purple">🌙 Sends Orion Moonward</span>
+      <span class="fact-chip orange">🛰️ Artemis I · II · III</span>
+      <div class="stage-feedback" id="s7-feedback"></div>
+    </div>
+  </div>
+  <div class="stage-actions">
+     <button class="stage-prev-btn" onclick="goToStage(6)">← Back</button>
+    <button class="stage-next-btn" id="s7-next" onclick="completeStage(7)" disabled>Continue &nbsp;</button>
+  </div>
+</div>
+
+<div class="sls-stage" data-stage="8">
+  <div class="stage-eyebrow">Stage 8 / 12 · Pre-Launch</div>
+  <h2 class="stage-title">Launch Readiness <span>Check</span> ✅</h2>
+  <p class="stage-sub">Before liftoff, every system must be verified. Check off each item once you've confirmed it's ready</p>
+  <div class="checklist" id="readiness-checklist">
+    <div class="checklist-item" data-check="fuel" onclick="toggleCheck(this)"><div class="checklist-box"></div><div class="checklist-text">⛽ Fuel — Core Stage tanks full</div></div>
+    <div class="checklist-item" data-check="engines" onclick="toggleCheck(this)"><div class="checklist-box"></div><div class="checklist-text">🔥 Engines — 4 RS-25s nominal</div></div>
+    <div class="checklist-item" data-check="boosters" onclick="toggleCheck(this)"><div class="checklist-box"></div><div class="checklist-text">🚀 Boosters — 5-segment SRBs armed</div></div>
+    <div class="checklist-item" data-check="crew" onclick="toggleCheck(this)"><div class="checklist-box"></div><div class="checklist-text">👨‍🚀 Crew Module — Orion secure</div></div>
+    <div class="checklist-item" data-check="guidance" onclick="toggleCheck(this)"><div class="checklist-box"></div><div class="checklist-text">🧭 Guidance Computer — online</div></div>
+  </div>
+  <div class="stage-feedback" id="s8-feedback"></div>
+  <div class="stage-actions">
+     <button class="stage-prev-btn" onclick="goToStage(7)">← Back</button>
+    <button class="stage-next-btn" id="s6-next" onclick="completeStage(8)" disabled>Continue &nbsp;</button>
+  </div>
+</div>
+
+<!--start-->
 
 <!-- AUTH GATE -->
 <div class="auth-gate-overlay" id="auth-gate">
@@ -1319,7 +1678,7 @@ html, body {
   </div>
 </div>
 
-<div class="hackclub-ribbon">HACK CLUB STARDANCE</div>
+<div class="hackclub-ribbon">Developed by Lidika Rahman</div>
 
 <script>
 // STARS
@@ -1347,6 +1706,7 @@ function drawStars() {
 }
 resizeCanvas(); initStars(); drawStars();
 window.addEventListener("resize", () => { resizeCanvas(); initStars(); });
+
 // AUTH STATE
 const accounts = {};
 let currentUser = null;
@@ -1439,12 +1799,14 @@ function goToPage(targetId) {
   const target = document.getElementById(targetId);
   if (!target || current===target) return;
   stopSpeech();
-  if (targetId === "page-sls-intro") target.scrollTop = 0;
+  // reset scroll when entering sls-intro / sls-build
+  if (targetId === "page-sls-intro" || targetId === "page-sls-build") target.scrollTop = 0;
   current.classList.add("exit-up"); current.classList.remove("active");
   setTimeout(()=>current.classList.remove("exit-up"),600);
   setTimeout(()=>{ target.classList.add("active"); if(targetId==="page-astro") startSlides(); },80);
 }
 
+// ROCKET BUBBLE
 const ROCKET_MESSAGES = ["Hello! 👋","To start your voyage,\nscroll down! ⬇️"];
 function initRocketBubble() {
   const bubble = document.getElementById("rocket-bubble");
@@ -1472,6 +1834,7 @@ function initRocketBubble() {
   }
   setTimeout(typeChar,1200);
 }
+
 // SPEECH SLIDES
 function getGreetingName() { return currentUser?currentUser.name:null; }
 function buildSlides() {
@@ -1479,16 +1842,16 @@ function buildSlides() {
   const greeting = name?`Hello, ${name}!`:isGuest?"Hello, curious explorer!":"Hello, young explorer!";
   const greetingHTML = name?`👋 <b>Hello, ${name}!</b>`:isGuest?`👋 <b>Hello, curious explorer!</b>`:`👋 <b>Hello, young explorer!</b>`;
   const slidesText = [
-    `${greeting} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to Stardance — your mission to the Moon starts right here!`,
+    `${greeting} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to the website — your mission to the Moon starts right here!`,
     `Here's the thing — space science is hard, and most kids never get to truly feel what it's like to BE an astronaut. Math, physics, engineering... they seem scary when they're just numbers on a page. Kids deserve better than textbooks!`,
-    `That's why Stardance turns the entire Moon mission into YOUR adventure! You'll engineer the rocket, train like a real astronaut, do actual calculations to launch and land, and even explore the lunar surface — all inside an interactive game built just for you!`,
-    `And the best part? Stardance watches how YOU perform — tracking your strengths, spotting where you need help, and giving you a personal astronaut score after every mission. By the time you're done, you'll think like a real space engineer!`,
+    `That's why this website turns the entire Moon mission into YOUR adventure! You'll engineer the rocket, train like a real astronaut, do actual calculations to launch and land, and even explore the lunar surface — all inside an interactive game built just for you!`,
+    `And the best part? The website watches how YOU perform — tracking your strengths, spotting where you need help, and giving you a personal astronaut score after every mission. By the time you're done, you'll think like a real space engineer!`,
   ];
   const slidesHTML = [
-    `${greetingHTML} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to <span class="highlight">Stardance</span> — your mission to the Moon starts right here! 🌙`,
+    `${greetingHTML} I'm Commander Lidika, and I've traveled all the way from the Moon just to meet you! Welcome to <span class="highlight">the website</span> — your mission to the Moon starts right here! 🌙`,
     `🌍 Here's the problem — space science feels <span class="highlight">scary and far away</span> for most kids. Math, physics, engineering... they're just numbers on a page. Kids like YOU deserve to actually <b>feel</b> what it's like to be an astronaut — not just read about it. 😔`,
-    `🚀 That's why <span class="highlight">Stardance</span> turns the Moon mission into YOUR adventure! Engineer the rocket, train like an astronaut, do real calculations to launch and land, and explore the lunar surface — all inside an <b>interactive game built just for you!</b> 🌕`,
-    `🏆 And Stardance <span class="highlight">watches how YOU perform</span> — tracking your strengths, spotting where you need help, and giving you a <b>personal astronaut score</b> after every mission. By the end, you'll think like a real space engineer! 💫`,
+    `🚀 That's why <span class="highlight">this website</span> turns the Moon mission into YOUR adventure! Engineer the rocket, train like an astronaut, do real calculations to launch and land, and explore the lunar surface — all inside an <b>interactive game built just for you!</b> 🌕`,
+    `🏆 And the website <span class="highlight">watches how YOU perform</span> — tracking your strengths, spotting where you need help, and giving you a <b>personal astronaut score</b> after every mission. By the end, you'll think like a real space engineer! 💫`,
   ];
   return {slidesText,slidesHTML};
 }
@@ -1569,6 +1932,22 @@ function selectAstronaut(gender){
   }
 }
 function goToDashboard(){if(!selectedAstronaut)return;buildDashboard();goToPage("page-dashboard");}
+const dashboardState = {
+  slsEngineeringDone: false,
+  xp: 120,
+  rank: "Cadet",
+};
+const RANKS = [
+  { min: 0, name: "Cadet" },
+  { min: 120, name: "Cadet" },
+  { min: 300, name: "Flight Specialist" },
+  { min: 500, name: "Senior Astronaut" },
+];
+function rankForXP(xp) {
+  let rank = "Cadet";
+  for (const r of RANKS) { if (xp >= r.min) rank = r.name; }
+  return rank;
+}
 function buildDashboard(){
   const miniWrap=document.getElementById("dash-astronaut-mini");
   if(miniWrap){
@@ -1596,13 +1975,807 @@ function buildDashboard(){
       <circle cx="78" cy="150" r="10" fill="${badgeColor}" opacity="0.85"/>
       <text x="78" y="154" text-anchor="middle" fill="white" font-size="6" font-weight="bold">SLS</text></svg>`;
   }
+  renderDashboardProgress(false);
+}
+function renderDashboardProgress(animateXP) {
   const xpEl=document.getElementById("dash-xp"),xpFill=document.getElementById("dash-xp-fill");
-  const xpTotal=120,xpMax=500;
+  const rankEl=document.getElementById("dash-rank");
+  const xpMax=500;
+  const targetXP = dashboardState.xp;
+  if (rankEl) rankEl.textContent = dashboardState.rank;
   if(xpEl&&xpFill){
-    let count=0;
-    const interval=setInterval(()=>{count+=4;if(count>=xpTotal){count=xpTotal;clearInterval(interval);}xpEl.textContent=count;},20);
-    setTimeout(()=>{xpFill.style.width=((xpTotal/xpMax)*100).toFixed(1)+"%";},300);
+    if (animateXP) {
+      let count = parseInt(xpEl.textContent,10) || 0;
+      const interval=setInterval(()=>{
+        count+=4;
+        if(count>=targetXP){count=targetXP;clearInterval(interval);}
+        xpEl.textContent=count;
+      },20);
+    } else {
+      xpEl.textContent = 0;
+      let count=0;
+      const interval=setInterval(()=>{count+=4;if(count>=targetXP){count=targetXP;clearInterval(interval);}xpEl.textContent=count;},20);
+    }
+    setTimeout(()=>{xpFill.style.width=((targetXP/xpMax)*100).toFixed(1)+"%";},300);
   }
+  // missions list
+  const missionsList = document.querySelector(".missions-list");
+  if (missionsList) {
+    missionsList.innerHTML = `
+      <div class="mission-item done">✅ Artemis Orientation</div>
+      <div class="mission-item done">✅ Meet Commander Lidika</div>
+      <div class="mission-item ${dashboardState.slsEngineeringDone ? 'done' : 'locked'}">${dashboardState.slsEngineeringDone ? '✅' : '🔒'} SLS Engineering</div>
+      <div class="mission-item locked">🔒 Lunar Trajectory Calc</div>
+      <div class="mission-item locked">🔒 Moonwalk Simulation</div>`;
+  }
+  // recommended training list
+  const trainingList = document.querySelector(".training-list");
+  if (trainingList) {
+    if (!dashboardState.slsEngineeringDone) {
+      trainingList.innerHTML = `
+        <div class="training-item">
+          <div class="training-dot"></div>
+          <div><div class="training-name">SLS Rocket Engineering</div><div class="training-desc">Build and tune the Space Launch System</div></div>
+          <div class="training-badge next">Next</div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot dim"></div>
+          <div><div class="training-name">Orbital Mechanics 101</div><div class="training-desc">Basic trajectory & delta-v calculations</div></div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot dim"></div>
+          <div><div class="training-name">Lunar Surface Ops</div><div class="training-desc">Moonwalk procedure & equipment</div></div>
+        </div>`;
+    } else {
+      trainingList.innerHTML = `
+        <div class="training-item">
+          <div class="training-dot" style="background:rgba(255,255,255,0.15);box-shadow:none;"></div>
+          <div><div class="training-name" style="opacity:0.5;">SLS Rocket Engineering</div><div class="training-desc">Completed ✅</div></div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot"></div>
+          <div><div class="training-name">Orbital Mechanics 101</div><div class="training-desc">Basic trajectory & delta-v calculations</div></div>
+          <div class="training-badge next">Next</div>
+        </div>
+        <div class="training-item">
+          <div class="training-dot dim"></div>
+          <div><div class="training-name">Lunar Surface Ops</div><div class="training-desc">Moonwalk procedure & equipment</div></div>
+        </div>`;
+    }
+  }
+  // footer button
+  const footerBtn = document.querySelector(".dash-footer .dash-proceed-btn");
+  if (footerBtn) {
+    if (!dashboardState.slsEngineeringDone) {
+      footerBtn.textContent = "🛸 Start SLS Engineering  →";
+      footerBtn.onclick = startSLSBuild;
+    } else {
+      footerBtn.textContent = "🌌 Start Orbital Mechanics 101  →";
+      footerBtn.onclick = () => showToast("🌌 Orbital Mechanics 101 launching soon! In Shaa Allah!");
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+// SLS ENGINEERING BUILD MODULE (12 stages)
+// ═══════════════════════════════════════════
+const sls = {
+  stage: 1,
+  totalStages: 12,
+  badgesEarned: new Set(),
+  score: {
+    design: 0,
+    knowledge: 0,
+    calc: 0,
+    mission: 0,
+  },
+  // FIXED totals — these reflect every point that's possible to earn across all 12 stages,
+  // so pct() always divides against the real ceiling instead of a denominator that only
+  // grows when a user happens to trigger addScore(). This is what was causing 0% to show
+  // even when real progress had been made.
+  scoreMax: { design: 65, knowledge: 58, calc: 35, mission: 75 },
+  feedbackLog: [],
+  // per-stage state
+  payloadsPlaced: { orion: false, supplies: false, lander: false },
+  payloadDestination: {}, // payload -> 'small' | 'sls'
+  coreSlotsFilled: {},
+  enginesInstalled: 0,
+  thrustCorrect: false,
+  boosterChoice: null,
+  orionStackOrder: [],
+  icpsIgnited: false,
+  checklistChecked: new Set(),
+  countdownRunning: false,
+  countdownDone: false,
+  separationDone: { boosters: false, core: false, icps: false },
+  separationAccuracy: [],
+  tliBurned: false,
+};
+
+function addScore(category, points, max) {
+  sls.score[category] = (sls.score[category] || 0) + points;
+  // scoreMax is now fixed in the sls object itself — don't grow it dynamically anymore.
+}
+function logFeedback(text) { sls.feedbackLog.push(text); }
+
+function startSLSBuild() {
+  resetSLSState();
+  goToPage("page-sls-build");
+  renderStageHUD();
+  goToStage(1);
+}
+function exitSLSBuild() {
+  goToPage("page-dashboard");
+}
+function replaySLSBuild() {
+  startSLSBuild();
+}
+function finishSLSEngineering(skipNext) {
+  // mark mission complete on the dashboard, award XP/rank, unlock next training
+  if (!dashboardState.slsEngineeringDone) {
+    dashboardState.slsEngineeringDone = true;
+    const overall = Math.round((pct("design") + pct("knowledge") + pct("calc") + pct("mission")) / 4) || 0;
+    const xpReward = 80 + Math.round(overall * 1.2); // performance-based XP, ~80-200
+    dashboardState.xp = Math.min(500, dashboardState.xp + xpReward);
+    dashboardState.rank = rankForXP(dashboardState.xp);
+    showToast(`🎉 SLS Engineering complete! +${xpReward} XP earned.`);
+  }
+  goToPage("page-dashboard");
+  renderDashboardProgress(true);
+  if (!skipNext) {
+    setTimeout(() => showToast("🌌 Orbital Mechanics 101 unlocked on your dashboard!"), 900);
+  }
+}
+function resetSLSState() {
+  sls.stage = 1;
+  sls.badgesEarned = new Set();
+  sls.score = { design: 0, knowledge: 0, calc: 0, mission: 0 };
+  sls.scoreMax = { design: 65, knowledge: 58, calc: 35, mission: 75 };
+  sls.feedbackLog = [];
+  sls.payloadsPlaced = { orion: false, supplies: false, lander: false };
+  sls.payloadDestination = {};
+  sls.coreSlotsFilled = {};
+  sls.enginesInstalled = 0;
+  sls.thrustCorrect = false;
+  sls.boosterChoice = null;
+  sls.orionStackOrder = [];
+  sls.icpsIgnited = false;
+  sls.checklistChecked = new Set();
+  sls.countdownRunning = false;
+  sls.countdownDone = false;
+  sls.separationDone = { boosters: false, core: false, icps: false };
+  sls.separationAccuracy = [];
+  sls.tliBurned = false;
+  document.querySelectorAll(".build-badge-chip").forEach(b => b.classList.remove("earned"));
+  document.querySelectorAll(".sls-stage [disabled]").forEach(b => {
+    if (b.classList.contains("stage-next-btn")) b.setAttribute("disabled", "");
+  });
+  // reset visual state of interactive elements
+  document.querySelectorAll(".payload-chip").forEach(c => c.classList.remove("placed"));
+  document.querySelectorAll(".rocket-drop-zone").forEach(z => { z.classList.remove("full","exploded"); });
+  const srf = document.getElementById("small-rocket-fill"); if (srf) srf.innerHTML = "";
+  const slf = document.getElementById("sls-rocket-fill"); if (slf) slf.innerHTML = "";
+  document.querySelectorAll(".core-slot").forEach(s => { s.classList.remove("filled"); const slot=s.dataset.slot; s.textContent = slot==="lh2"?"Liquid Hydrogen Tank":slot==="lox"?"Liquid Oxygen Tank":slot==="avionics"?"Avionics (Top)":"Engine Section (Bottom)"; });
+  document.querySelectorAll(".core-part-chip").forEach(c => c.classList.remove("used"));
+  document.querySelectorAll(".engine-slot").forEach(s => { s.classList.remove("filled"); s.textContent=""; });
+  document.querySelectorAll(".engine-drag-source").forEach(s => s.classList.remove("used"));
+  const thrustInput = document.getElementById("thrust-answer"); if (thrustInput) thrustInput.value = "";
+  document.querySelectorAll(".booster-card").forEach(c => c.classList.remove("chosen-right","chosen-wrong"));
+  document.querySelectorAll(".orion-piece").forEach(p => p.classList.remove("used"));
+  const osz = document.getElementById("orion-stack-zone"); if (osz) osz.innerHTML = '<div class="orion-slot-hint" style="width:100%">Stack here (bottom → top)</div>';
+  const icpsBtn = document.getElementById("icps-ignite-btn"); if (icpsBtn) icpsBtn.classList.remove("ignited");
+  const icpsLabel = document.getElementById("icps-ignite-label"); if (icpsLabel) icpsLabel.innerHTML = 'RL10 ENGINE<br/><span>👆 Click to Ignite</span>';
+  document.querySelectorAll(".checklist-item").forEach(i => i.classList.remove("checked"));
+  const cd = document.getElementById("countdown-display"); if (cd) cd.textContent = "T-10";
+  const ff = document.getElementById("flame-fx"); if (ff) ff.classList.remove("on");
+  const mrs = document.getElementById("mini-rocket-sim"); if (mrs) mrs.classList.remove("liftoff");
+  const lsb = document.getElementById("launch-start-btn"); if (lsb) lsb.removeAttribute("disabled");
+  ["tm-thrust","tm-fuel","tm-velocity","tm-altitude"].forEach(id=>{});
+  document.getElementById("tm-thrust") && (document.getElementById("tm-thrust").textContent="0%");
+  document.getElementById("tm-fuel") && (document.getElementById("tm-fuel").textContent="100%");
+  document.getElementById("tm-velocity") && (document.getElementById("tm-velocity").textContent="0 mph");
+  document.getElementById("tm-altitude") && (document.getElementById("tm-altitude").textContent="0 mi");
+  document.querySelectorAll(".sep-action-btn").forEach(b => { b.classList.remove("done"); b.removeAttribute("disabled"); });
+  const sp = document.getElementById("separation-progress"); if (sp) sp.style.width = "0%";
+  const tliBtn = document.getElementById("tli-burn-btn"); if (tliBtn) tliBtn.removeAttribute("disabled");
+  const tliPath = document.getElementById("tli-path"); if (tliPath) tliPath.style.opacity = "0";
+  document.querySelectorAll(".stage-feedback").forEach(f => { f.classList.remove("show","good","bad"); f.innerHTML=""; });
+  document.querySelectorAll(".stage-next-btn").forEach(b => { if (b.id && b.id.match(/^s\d+-next$/)) b.setAttribute("disabled",""); });
+}
+
+function renderStageHUD() {
+  const stageLabel = document.getElementById("build-hud-stage");
+  const fill = document.getElementById("build-hud-fill");
+  if (stageLabel) stageLabel.textContent = `Stage ${sls.stage} / ${sls.totalStages}`;
+  if (fill) fill.style.width = ((sls.stage - 1) / sls.totalStages * 100 + 8.33) + "%";
+}
+
+function goToStage(n) {
+  document.querySelectorAll(".sls-stage").forEach(s => s.classList.remove("active"));
+  const target = document.querySelector(`.sls-stage[data-stage="${n}"]`);
+  if (target) target.classList.add("active");
+  sls.stage = n;
+  renderStageHUD();
+  const wrap = document.querySelector(".build-stage-wrap");
+  if (wrap) wrap.scrollTop = 0;
+  if (n === 1) {
+    const greet = document.getElementById("s1-greeting");
+    if (greet) {
+      const name = currentUser ? currentUser.name : (isGuest ? "Explorer" : "Engineer");
+      greet.textContent = `${name}, NASA needs your help building the rocket that will take Artemis astronauts to the Moon. Are you ready, Engineer?`;
+    }
+  }
+}
+
+const BADGE_NAMES = {
+  1: "Junior Rocket Engineer", 2: "Mission Architect", 3: "Core Stage Builder",
+  4: "Propulsion Specialist", 5: "Booster Commander", 6: "Orion Architect",
+  7: "Upper Stage Engineer", 8: "Launch Director", 9: "Flight Controller",
+  10: "Separation Specialist", 11: "Navigator", 12: "Certified SLS Engineer",
+};
+const BADGE_ICONS = {
+  1:"🛰️",2:"🌙",3:"🧪",4:"🔥",5:"🚀",6:"🛡️",7:"⚙️",8:"✅",9:"📡",10:"🪂",11:"🌌",12:"🏆"
+};
+
+function awardBadge(n) {
+  if (sls.badgesEarned.has(n)) return;
+  sls.badgesEarned.add(n);
+  const chip = document.getElementById("badge-chip-" + n);
+  if (chip) chip.classList.add("earned");
+  showBadgeToast(n);
+}
+function showBadgeToast(n) {
+  const toast = document.getElementById("badge-toast");
+  const icon = document.getElementById("badge-toast-icon");
+  const name = document.getElementById("badge-toast-name");
+  if (!toast) return;
+  icon.textContent = BADGE_ICONS[n];
+  name.textContent = BADGE_NAMES[n];
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3200);
+}
+
+// Single, reliable dispatcher: every "Continue" button calls completeStage(n) via its
+// inline onclick. This is the ONE place that awards the stage's badge and any
+// stage-completion-only scoring, so there is no separate fragile listener that could
+// fail to attach. Stage-specific interaction scoring (drag-drop, calculations, choices)
+// is still added live, at the moment of the interaction itself, inside each stage's
+// own handler — completeStage() only adds the badge + any flat "completed this stage" bonus.
+function completeStage(n) {
+  switch (n) {
+    case 1:
+      awardBadge(1);
+      addScore("mission", 10, 10);
+      logFeedback("✅ Accepted the Artemis mission briefing — great start!");
+      break;
+    case 2: awardBadge(2); addScore("mission", 10, 10); break;
+    case 3: awardBadge(3); break;
+    case 4: awardBadge(4); break;
+    case 5: awardBadge(5); break;
+    case 6: awardBadge(6); break;
+    case 7: awardBadge(7); break;
+    case 8: awardBadge(8); break;
+    case 9: awardBadge(9); break;
+    case 10: awardBadge(10); break;
+    case 11: awardBadge(11); break;
+  }
+  if (n < sls.totalStages) {
+    goToStage(n + 1);
+  } else {
+    renderReportCard();
+  }
+}
+
+function showStageFeedback(id, msg, good) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = msg;
+  el.classList.remove("good","bad");
+  el.classList.add("show", good ? "good" : "bad");
+}
+
+// ── STAGE 1 ──
+// (badge + score now awarded directly inside completeStage(1) — see consolidated dispatcher below)
+
+// ── STAGE 2: Payload drag & drop ──
+function initStage2DnD() {
+  document.querySelectorAll(".payload-chip").forEach(chip => {
+    chip.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("text/plain", chip.dataset.payload);
+    });
+  });
+  ["small-rocket-zone", "sls-rocket-zone"].forEach(zoneId => {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+    zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("drag-over"); });
+    zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+    zone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      zone.classList.remove("drag-over");
+      const payload = e.dataTransfer.getData("text/plain");
+      handlePayloadDrop(payload, zoneId === "small-rocket-zone" ? "small" : "sls");
+    });
+  });
+  // allow dragging a payload back OUT of a rocket (re-grab from the fill display)
+  ["small-rocket-fill", "sls-rocket-fill"].forEach(fillId => {
+    const fill = document.getElementById(fillId);
+    if (!fill) return;
+    fill.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("rdz-item")) {
+        e.dataTransfer.setData("text/plain", e.target.dataset.payload);
+      }
+    });
+  });
+}
+const PAYLOAD_ICON = { orion: "🛰️", supplies: "📦", lander: "🚀" };
+const PAYLOAD_WEIGHTS = { orion: 33000, supplies: 12000, lander: 45000 };
+function handlePayloadDrop(payload, destination) {
+  if (!payload) return;
+  // if already placed somewhere, just move it (remove old visual, place new)
+  const previousDestination = sls.payloadDestination[payload];
+  if (previousDestination === destination) return; // no-op, dropped back in same zone
+  if (previousDestination) {
+    const oldFillId = previousDestination === "small" ? "small-rocket-fill" : "sls-rocket-fill";
+    const oldFill = document.getElementById(oldFillId);
+    if (oldFill) {
+      const oldItem = oldFill.querySelector(`.rdz-item[data-payload="${payload}"]`);
+      if (oldItem) oldItem.remove();
+    }
+    // un-explode the zone it's leaving, recompute will re-check below
+    const oldZone = document.getElementById(previousDestination === "small" ? "small-rocket-zone" : "sls-rocket-zone");
+    if (oldZone) oldZone.classList.remove("exploded");
+  }
+  sls.payloadsPlaced[payload] = true;
+  sls.payloadDestination[payload] = destination;
+  const chip = document.querySelector(`.payload-chip[data-payload="${payload}"]`);
+  if (chip) chip.classList.add("placed");
+  const fillId = destination === "small" ? "small-rocket-fill" : "sls-rocket-fill";
+  const fill = document.getElementById(fillId);
+  if (fill) {
+    const item = document.createElement("div");
+    item.className = "rdz-item";
+    item.draggable = true;
+    item.dataset.payload = payload;
+    item.title = "Drag again to move this payload";
+    item.textContent = PAYLOAD_ICON[payload];
+    fill.appendChild(item);
+  }
+  // check small rocket overload (recompute fresh each time, since payloads can move)
+  const smallTotal = Object.keys(sls.payloadDestination).filter(p => sls.payloadDestination[p] === "small").reduce((sum,p) => sum + PAYLOAD_WEIGHTS[p], 0);
+  const smallZone = document.getElementById("small-rocket-zone");
+  if (smallTotal > 40000 && smallZone) {
+    smallZone.classList.add("exploded");
+    showStageFeedback("s2-feedback", "💥 The regular rocket is overloaded! It can't carry this much weight to the Moon — that's exactly why NASA built SLS.", false);
+  } else if (smallZone) {
+    smallZone.classList.remove("exploded");
+  }
+  const placedCount = Object.values(sls.payloadsPlaced).filter(Boolean).length;
+  if (placedCount === 3) {
+    const next = document.getElementById("s2-next");
+    if (next) next.removeAttribute("disabled");
+    if (!smallZone.classList.contains("exploded")) {
+      showStageFeedback("s2-feedback", "🤔 Try dragging a payload from the SLS rocket over to the regular rocket to see what happens when it's overloaded — or continue if you've already seen it.", true);
+    } else {
+      const onSLS = Object.keys(sls.payloadDestination).filter(p => sls.payloadDestination[p] === "sls").length;
+      addScore("knowledge", 10 + onSLS, 13);
+      logFeedback("✅ Discovered why SLS is essential for heavy Moon payloads.");
+    }
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  initStage2DnD();
+});
+
+// ── STAGE 3: Core stage assembly ──
+const CORE_SLOT_LABEL = { lh2: "Liquid Hydrogen Tank", lox: "Liquid Oxygen Tank", avionics: "Avionics (Top)", engine: "Engine Section (Bottom)" };
+const CORE_SLOT_ICON = { lh2: "💧", lox: "🌬️", avionics: "🧠", engine: "🔧" };
+function initStage3DnD() {
+  document.querySelectorAll(".core-part-chip").forEach(chip => {
+    chip.addEventListener("dragstart", (e) => e.dataTransfer.setData("text/plain", chip.dataset.part));
+  });
+  document.querySelectorAll(".core-slot").forEach(slot => {
+    slot.addEventListener("dragover", (e) => { e.preventDefault(); slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", () => slot.classList.remove("drag-over"));
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      slot.classList.remove("drag-over");
+      const part = e.dataTransfer.getData("text/plain");
+      handleCorePartDrop(part, slot);
+    });
+  });
+}
+function handleCorePartDrop(part, slot) {
+  if (!part || slot.classList.contains("filled")) return;
+  const correctSlot = slot.dataset.slot;
+  if (part !== correctSlot) {
+    showStageFeedback("s3-feedback", `❌ ${CORE_SLOT_ICON[part]} doesn't belong there — try matching it to the correct labeled section.`, false);
+    return;
+  }
+  slot.classList.add("filled");
+  slot.textContent = CORE_SLOT_ICON[part] + " " + CORE_SLOT_LABEL[part];
+  sls.coreSlotsFilled[part] = true;
+  const chip = document.querySelector(`.core-part-chip[data-part="${part}"]`);
+  if (chip) chip.classList.add("used");
+  const filledCount = Object.keys(sls.coreSlotsFilled).length;
+  if (filledCount === 4) {
+    showStageFeedback("s3-feedback", "🎉 Core Stage fully assembled! 212+ ft of engineering, ready for fueling.", true);
+    document.getElementById("s3-next").removeAttribute("disabled");
+    addScore("design", 20, 20);
+    addScore("knowledge", 10, 10);
+    logFeedback("✅ Assembled the Core Stage with zero mistakes — strong structural engineering.");
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  initStage3DnD();
+});
+
+// ── STAGE 4: Engines + thrust calc ──
+function initStage4DnD() {
+  document.querySelectorAll(".engine-drag-source").forEach(src => {
+    src.addEventListener("dragstart", (e) => e.dataTransfer.setData("text/plain", "rs25"));
+  });
+  document.querySelectorAll(".engine-slot").forEach(slot => {
+    slot.addEventListener("dragover", (e) => { e.preventDefault(); slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", () => slot.classList.remove("drag-over"));
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      slot.classList.remove("drag-over");
+      if (slot.classList.contains("filled")) return;
+      const engine = e.dataTransfer.getData("text/plain");
+      if (!engine) return;
+      slot.classList.add("filled");
+      slot.textContent = "🔥";
+      sls.enginesInstalled++;
+      const unused = document.querySelector(".engine-drag-source:not(.used)");
+      if (unused) unused.classList.add("used");
+      checkEngineProgress();
+    });
+  });
+}
+function checkEngineProgress() {
+  if (sls.enginesInstalled >= 4) {
+    addScore("design", 15, 15);
+    logFeedback("✅ All 4 RS-25 engines installed correctly.");
+    maybeUnlockStage4();
+  }
+}
+function checkThrustCalc() {
+  const input = document.getElementById("thrust-answer");
+  const val = parseInt(input.value, 10);
+  if (val === 2048000 || (val >= 1900000 && val <= 2100000)) {
+    showStageFeedback("s4-feedback", "✅ Correct! 4 × 512,000 lbs ≈ 2,048,000 lbs of thrust — that's about 2 million pounds!", true);
+    sls.thrustCorrect = true;
+    addScore("calc", 15, 15);
+    logFeedback("✅ Nailed the thrust calculation — strong math skills.");
+  } else {
+    showStageFeedback("s4-feedback", "❌ Not quite. Try multiplying 512,000 lbs × 4 engines.", false);
+    addScore("calc", 5, 15);
+  }
+  maybeUnlockStage4();
+}
+function maybeUnlockStage4() {
+  if (sls.enginesInstalled >= 4 && sls.thrustCorrect) {
+    document.getElementById("s4-next").removeAttribute("disabled");
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  initStage4DnD();
+});
+
+// ── STAGE 5: Booster choice ──
+function chooseBooster(choice) {
+  sls.boosterChoice = choice;
+  document.getElementById("booster-4seg").classList.remove("chosen-right","chosen-wrong");
+  document.getElementById("booster-5seg").classList.remove("chosen-right","chosen-wrong");
+  if (choice === "5seg") {
+    document.getElementById("booster-5seg").classList.add("chosen-right");
+    showStageFeedback("s5-feedback", "🎉 Correct! NASA upgraded to 5-segment boosters to generate the extra thrust SLS needs for deep-space missions.", true);
+    addScore("knowledge", 15, 15);
+    logFeedback("✅ Identified the correct booster upgrade — solid engineering knowledge.");
+  } else {
+    document.getElementById("booster-4seg").classList.add("chosen-wrong");
+    showStageFeedback("s5-feedback", "🤔 4-segment boosters powered the Space Shuttle, but SLS needs more thrust for its heavier Moon payloads. Try the 5-segment booster!", false);
+    addScore("knowledge", 5, 15);
+  }
+  document.getElementById("s5-next").removeAttribute("disabled");
+}
+
+// ── STAGE 6: Orion stack puzzle ──
+// Pieces are appended into a column-reverse flex container, so the FIRST piece dropped
+// ends up visually at the BOTTOM, and sls.orionStackOrder (built in drop order) already
+// represents bottom-to-top order. Correct real order: Service Module (bottom) →
+// Crew Module → Adapter → Launch Abort System (top).
+const ORION_CORRECT_ORDER = ["service", "crew", "adapter", "las"]; // bottom to top
+const ORION_PIECE_LABEL = {
+  las: "🚨 Launch Abort System", crew: "👨‍🚀 Crew Module",
+  adapter: "🔗 Adapter", service: "⚡ Service Module"
+};
+const ORION_POSITION_NAME = ["BOTTOM", "", "", "TOP"];
+function initStage6DnD() {
+  document.querySelectorAll(".orion-piece").forEach(piece => {
+    piece.addEventListener("dragstart", (e) => e.dataTransfer.setData("text/plain", piece.dataset.piece));
+  });
+  const zone = document.getElementById("orion-stack-zone");
+  if (!zone) return;
+  zone.addEventListener("dragover", (e) => e.preventDefault());
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    const piece = e.dataTransfer.getData("text/plain");
+    if (!piece || sls.orionStackOrder.includes(piece)) return;
+    const positionIndex = sls.orionStackOrder.length; // 0 = bottom, 3 = top
+    sls.orionStackOrder.push(piece);
+    const hint = zone.querySelector(".orion-slot-hint");
+    if (hint) hint.remove();
+    const div = document.createElement("div");
+    div.className = "orion-piece placed-correct";
+    div.dataset.piece = piece;
+    const posLabel = positionIndex === 0 ? "⬇ BOTTOM" : positionIndex === 3 ? "⬆ TOP" : `Level ${positionIndex + 1}`;
+    div.innerHTML = `${ORION_PIECE_LABEL[piece]} <span style="opacity:0.5;font-size:0.7rem;">(${posLabel})</span>`;
+    zone.appendChild(div);
+    const sourceChip = document.querySelector(`.orion-pieces-tray .orion-piece[data-piece="${piece}"]`);
+    if (sourceChip) sourceChip.classList.add("used");
+    if (sls.orionStackOrder.length === 4) {
+      checkOrionOrder();
+    } else {
+      showStageFeedback("s6-feedback", `📍 Placed at position ${positionIndex + 1} of 4. Keep stacking — remember, Service Module belongs at the very bottom.`, true);
+    }
+  });
+}
+function checkOrionOrder() {
+  const isExactMatch = JSON.stringify(sls.orionStackOrder) === JSON.stringify(ORION_CORRECT_ORDER);
+  // count how many positions are correct, for partial credit + a clearer explanation
+  let correctPositions = 0;
+  sls.orionStackOrder.forEach((piece, i) => { if (piece === ORION_CORRECT_ORDER[i]) correctPositions++; });
+
+  if (isExactMatch) {
+    showStageFeedback("s6-feedback", "🎉 Perfect stack order! Service Module (bottom) → Crew Module → Adapter → Launch Abort System (top).", true);
+    addScore("design", 20, 20);
+    logFeedback("✅ Assembled the Orion stack in the correct order on the first try.");
+  } else if (correctPositions >= 2) {
+    showStageFeedback("s6-feedback", `👍 Good attempt — ${correctPositions}/4 pieces are in their correct position. The real order is Service Module (bottom) → Crew Module → Adapter → Launch Abort System (top). You can still continue!`, true);
+    addScore("design", 10 + correctPositions, 20);
+    logFeedback("✅ Assembled most of the Orion stack correctly.");
+  } else {
+    showStageFeedback("s6-feedback", "🤔 The order matters for crew safety. Real Orion order: Service Module (bottom) → Crew Module → Adapter → Launch Abort System (top). You can still continue!", false);
+    addScore("design", 6, 20);
+  }
+  document.getElementById("s6-next").removeAttribute("disabled");
+}
+document.addEventListener("DOMContentLoaded", () => {
+  initStage6DnD();
+});
+
+// ── STAGE 7: ICPS ignition ──
+function igniteICPS() {
+  if (sls.icpsIgnited) return;
+  sls.icpsIgnited = true;
+  document.getElementById("icps-ignite-btn").classList.add("ignited");
+  const label = document.getElementById("icps-ignite-label");
+  if (label) label.innerHTML = 'RL10 ENGINE<br/><span style="color:var(--planet-teal)">🔥 Ignited!</span>';
+  showStageFeedback("s7-feedback", "🔥 ICPS ignited! The RL10 engine is now burning to send Orion toward the Moon.", true);
+  document.getElementById("s7-next").removeAttribute("disabled");
+  addScore("knowledge", 10, 10);
+  logFeedback("✅ Successfully activated the ICPS upper stage.");
+}
+
+// ── STAGE 8: Checklist ──
+function toggleCheck(el) {
+  const check = el.dataset.check;
+  if (sls.checklistChecked.has(check)) {
+    sls.checklistChecked.delete(check);
+    el.classList.remove("checked");
+    el.querySelector(".checklist-box").textContent = "";
+  } else {
+    sls.checklistChecked.add(check);
+    el.classList.add("checked");
+    el.querySelector(".checklist-box").textContent = "✓";
+  }
+  if (sls.checklistChecked.size === 5) {
+    showStageFeedback("s8-feedback", "✅ All systems GO for launch!", true);
+    document.getElementById("s8-next").removeAttribute("disabled");
+    addScore("mission", 15, 15);
+    logFeedback("✅ Completed full pre-launch readiness check.");
+  } else {
+    document.getElementById("s8-next").setAttribute("disabled", "");
+  }
+}
+
+// ── STAGE 9: Launch simulation ──
+function startCountdown() {
+  if (sls.countdownRunning) return;
+  sls.countdownRunning = true;
+  document.getElementById("launch-start-btn").setAttribute("disabled", "");
+  let t = 10;
+  const cd = document.getElementById("countdown-display");
+  const timer = setInterval(() => {
+    if (t > 0) {
+      cd.textContent = "T-" + t;
+      t--;
+    } else {
+      clearInterval(timer);
+      cd.textContent = "LIFTOFF! 🚀";
+      document.getElementById("flame-fx").classList.add("on");
+      document.getElementById("mini-rocket-sim").classList.add("liftoff");
+      runTelemetry();
+    }
+  }, 600);
+}
+function runTelemetry() {
+  let thrust = 0, fuel = 100, velocity = 0, altitude = 0;
+  const interval = setInterval(() => {
+    thrust = Math.min(100, thrust + 12);
+    fuel = Math.max(40, fuel - 6);
+    velocity += 180 + Math.random() * 60;
+    altitude += 1.2 + Math.random() * 0.6;
+    document.getElementById("tm-thrust").textContent = thrust + "%";
+    document.getElementById("tm-fuel").textContent = fuel + "%";
+    document.getElementById("tm-velocity").textContent = Math.round(velocity) + " mph";
+    document.getElementById("tm-altitude").textContent = altitude.toFixed(1) + " mi";
+    if (thrust >= 100) {
+      clearInterval(interval);
+      sls.countdownDone = true;
+      showStageFeedback("s9-feedback", "🎉 Liftoff successful! SLS is climbing through the atmosphere.", true);
+      document.getElementById("s9-next").removeAttribute("disabled");
+      addScore("mission", 15, 15);
+      addScore("design", 10, 10);
+      logFeedback("✅ Achieved a clean liftoff with full thrust.");
+    }
+  }, 260);
+}
+
+// ── STAGE 10: Stage separation timing ──
+let sepTimelineInterval = null;
+let sepProgressPct = 0;
+function startSeparationTimeline() {
+  if (sepTimelineInterval) return;
+  sepProgressPct = 0;
+  sepTimelineInterval = setInterval(() => {
+    sepProgressPct += 0.6;
+    if (sepProgressPct > 100) sepProgressPct = 100;
+    const bar = document.getElementById("separation-progress");
+    if (bar) bar.style.width = sepProgressPct + "%";
+    if (sepProgressPct >= 100) {
+      clearInterval(sepTimelineInterval);
+      sepTimelineInterval = null;
+      finalizeSeparation();
+    }
+  }, 60);
+}
+const SEP_TARGETS = { boosters: 20, core: 55, icps: 85 };
+function separationAction(type) {
+  if (sls.separationDone[type]) return;
+  if (!sepTimelineInterval && sepProgressPct === 0) startSeparationTimeline();
+  const target = SEP_TARGETS[type];
+  const diff = Math.abs(sepProgressPct - target);
+  sls.separationDone[type] = true;
+  sls.separationAccuracy.push(diff);
+  const btn = document.getElementById("sep-" + type);
+  if (btn) { btn.classList.add("done"); btn.setAttribute("disabled", ""); }
+  if (diff < 6) {
+    showStageFeedback("s10-feedback", `🎯 Perfect timing on ${type}! Right on target.`, true);
+  } else if (diff < 15) {
+    showStageFeedback("s10-feedback", `👍 Good timing on ${type}, just slightly off.`, true);
+  } else {
+    showStageFeedback("s10-feedback", `⚠️ ${type} triggered off-schedule — timing matters for a clean separation.`, false);
+  }
+  if (Object.values(sls.separationDone).every(Boolean)) {
+    finalizeSeparation();
+  }
+}
+function finalizeSeparation() {
+  if (sepTimelineInterval) { clearInterval(sepTimelineInterval); sepTimelineInterval = null; }
+  // auto-fail any not done
+  ["boosters","core","icps"].forEach(type => {
+    if (!sls.separationDone[type]) {
+      sls.separationDone[type] = true;
+      sls.separationAccuracy.push(40);
+      const btn = document.getElementById("sep-" + type);
+      if (btn) { btn.setAttribute("disabled",""); }
+    }
+  });
+  const avgDiff = sls.separationAccuracy.reduce((a,b)=>a+b,0) / sls.separationAccuracy.length;
+  const score = Math.max(5, Math.round(20 - avgDiff / 2));
+  addScore("calc", score, 20);
+  addScore("mission", 10, 10);
+  logFeedback(avgDiff < 10 ? "✅ Excellent stage separation timing." : "⚠️ Stage separation timing could be more precise — review the burn schedule next time.");
+  document.getElementById("s10-next").removeAttribute("disabled");
+}
+
+// ── STAGE 11: TLI burn ──
+function performTLIBurn() {
+  if (sls.tliBurned) return;
+  sls.tliBurned = true;
+  document.getElementById("tli-burn-btn").setAttribute("disabled", "");
+  const path = document.getElementById("tli-path");
+  const craft = document.getElementById("tli-craft");
+  if (path) path.style.opacity = "1";
+  if (craft) {
+    let progress = 0;
+    const anim = setInterval(() => {
+      progress += 0.02;
+      if (progress >= 1) { progress = 1; clearInterval(anim); }
+      const x = 170 + (295 - 170) * progress;
+      const y = 120 + (65 - 120) * progress - 40 * Math.sin(progress * Math.PI);
+      craft.setAttribute("cx", x);
+      craft.setAttribute("cy", y);
+    }, 30);
+  }
+  setTimeout(() => {
+    showStageFeedback("s11-feedback", "🌌 Trans-Lunar Injection complete! Orion is now on a path to the Moon.", true);
+    document.getElementById("s11-next").removeAttribute("disabled");
+    addScore("knowledge", 10, 10);
+    addScore("mission", 15, 15);
+    logFeedback("✅ Executed a successful Trans-Lunar Injection burn.");
+  }, 1300);
+}
+
+// ── STAGE 12: Report card ──
+function pct(category) {
+  const max = sls.scoreMax[category];
+  if (!max) return 0;
+  return Math.round((sls.score[category] / max) * 100);
+}
+function renderReportCard() {
+  goToStage(12);
+  awardBadge(12);
+  const designPct = pct("design");
+  const knowledgePct = pct("knowledge");
+  const calcPct = pct("calc");
+  const missionPct = pct("mission");
+
+  const name = currentUser ? currentUser.name : (isGuest ? "Explorer" : "Engineer");
+  const greet = document.getElementById("s12-greeting");
+  if (greet) greet.textContent = `Mission complete, ${name}! Here's how you performed as an SLS engineer.`;
+
+  animateReportValue("rc-design", "rc-design-bar", designPct);
+  animateReportValue("rc-knowledge", "rc-knowledge-bar", knowledgePct);
+  animateReportValue("rc-calc", "rc-calc-bar", calcPct);
+  animateReportValue("rc-mission", "rc-mission-bar", missionPct);
+
+  const list = document.getElementById("report-feedback-list");
+  if (list) {
+    list.innerHTML = "";
+    const strengths = [];
+    const weaknesses = [];
+    if (designPct >= 75) strengths.push("🚀 Strong rocket design instincts — your assembly choices were precise.");
+    else weaknesses.push("🚀 Review rocket component placement — accuracy here affects structural integrity.");
+    if (knowledgePct >= 75) strengths.push("⚙️ Excellent grasp of SLS engineering concepts.");
+    else weaknesses.push("⚙️ Revisit the engineering facts — knowing why each system exists helps with design choices.");
+    if (calcPct >= 75) strengths.push("🧮 Sharp calculations — thrust and timing math were on point.");
+    else weaknesses.push("🧮 Practice your thrust and timing calculations for more precision.");
+    if (missionPct >= 75) strengths.push("🌙 Outstanding mission execution from briefing to Trans-Lunar Injection.");
+    else weaknesses.push("🌙 Work on completing mission checklists fully before advancing.");
+
+    [...strengths, ...weaknesses, ...sls.feedbackLog.slice(-3)].forEach(text => {
+      const row = document.createElement("div");
+      row.className = "report-feedback-row";
+      row.innerHTML = `<span>•</span><span>${text}</span>`;
+      list.appendChild(row);
+    });
+  }
+
+  const overall = Math.round((designPct + knowledgePct + calcPct + missionPct) / 4);
+  const finalBadgeEl = document.getElementById("report-final-badge");
+  if (finalBadgeEl) {
+    let rank = "Cadet Engineer", icon = "🛰️";
+    if (overall >= 90) { rank = "Master Rocket Engineer"; icon = "🏆"; }
+    else if (overall >= 75) { rank = "Senior Rocket Engineer"; icon = "🥇"; }
+    else if (overall >= 50) { rank = "Certified SLS Engineer"; icon = "🎖️"; }
+    finalBadgeEl.innerHTML = `<div class="badge-icon">${icon}</div><div class="badge-name">${rank}</div>`;
+  }
+  logFeedback(`Final overall score: ${overall}%`);
+}
+function animateReportValue(valueId, barId, target) {
+  const valueEl = document.getElementById(valueId);
+  const barEl = document.getElementById(barId);
+  let current = 0;
+  const step = Math.max(1, Math.round(target / 30));
+  const interval = setInterval(() => {
+    current = Math.min(target, current + step);
+    if (valueEl) valueEl.textContent = current + "%";
+    if (current >= target) clearInterval(interval);
+  }, 20);
+  if (barEl) setTimeout(() => { barEl.style.width = target + "%"; }, 100);
 }
 
 // INIT
